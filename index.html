@@ -1,0 +1,1216 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>بينك فلاور | Pink Flower - متجر الورود والهدايا الفاخرة</title>
+    
+    <!-- استدعاء خط القاهرة و Playfair Display من جوجل -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Playfair+Display:ital,wght@0,600;1,600&display=swap" rel="stylesheet">
+    
+    <!-- استدعاء Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- أيقونات Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        cairo: ['Cairo', 'sans-serif'],
+                        playfair: ['Playfair Display', 'serif'],
+                    },
+                    colors: {
+                        pinkSoft: '#fdf2f8',
+                        pinkPrimary: '#ec4899',
+                        pinkDeep: '#be185d',
+                        roseAccent: '#fb7185',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* تنسيقات الخلفية المتدرجة والزجاج الشفاف (Glassmorphism) */
+        body {
+            font-family: 'Cairo', sans-serif;
+            background: linear-gradient(135deg, #ffe4e6 0%, #fce7f3 35%, #fff1f2 70%, #fbcfe8 100%);
+            background-attachment: fixed;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* دوائر ضبابية في الخلفية لإبراز تأثير الشفافية الزجاجية */
+        .bg-blob-1 {
+            position: fixed;
+            top: -10%;
+            right: -5%;
+            width: 450px;
+            height: 450px;
+            background: radial-gradient(circle, rgba(244, 114, 182, 0.35) 0%, rgba(255, 255, 255, 0) 70%);
+            border-radius: 50%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .bg-blob-2 {
+            position: fixed;
+            bottom: -15%;
+            left: -10%;
+            width: 550px;
+            height: 550px;
+            background: radial-gradient(circle, rgba(251, 113, 133, 0.3) 0%, rgba(255, 255, 255, 0) 70%);
+            border-radius: 50%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .bg-blob-3 {
+            position: fixed;
+            top: 40%;
+            left: 30%;
+            width: 350px;
+            height: 350px;
+            background: radial-gradient(circle, rgba(232, 121, 249, 0.18) 0%, rgba(255, 255, 255, 0) 70%);
+            border-radius: 50%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* التأثير الزجاجي الأساسي */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.48);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.75);
+            box-shadow: 0 8px 32px 0 rgba(219, 39, 119, 0.08);
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.55);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.85);
+            box-shadow: 0 10px 25px -5px rgba(236, 72, 153, 0.08);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .glass-card:hover {
+            background: rgba(255, 255, 255, 0.75);
+            transform: translateY(-5px);
+            box-shadow: 0 20px 30px -10px rgba(236, 72, 153, 0.18);
+            border-color: rgba(244, 114, 182, 0.6);
+        }
+
+        .glass-input {
+            background: rgba(255, 255, 255, 0.65);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(244, 114, 182, 0.35);
+            transition: all 0.25s ease;
+        }
+
+        .glass-input:focus {
+            background: rgba(255, 255, 255, 0.92);
+            border-color: #ec4899;
+            box-shadow: 0 0 0 4px rgba(236, 72, 153, 0.15);
+            outline: none;
+        }
+
+        .glass-drawer {
+            background: rgba(255, 250, 252, 0.88);
+            backdrop-filter: blur(22px);
+            -webkit-backdrop-filter: blur(22px);
+            border-right: 1px solid rgba(255, 255, 255, 0.9);
+        }
+
+        /* شريط تمرير ناعم */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(236, 72, 153, 0.35);
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(236, 72, 153, 0.6);
+        }
+
+        /* حركة ظهور البطاقات */
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(15px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .animate-fade-up {
+            animation: fadeUp 0.4s ease forwards;
+        }
+    </style>
+</head>
+<body class="text-slate-800 antialiased selection:bg-pink-200 selection:text-pink-900">
+
+    <!-- عناصر الخلفية الضبابية لإظهار الشفافية -->
+    <div class="bg-blob-1"></div>
+    <div class="bg-blob-2"></div>
+    <div class="bg-blob-3"></div>
+
+    <!-- رسالة تنبيه منبثقة (Toast Notification) -->
+    <div id="toast-container" class="fixed bottom-5 left-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+    <!-- الشريط العلوي الثابت (Header) يضم اللوجو + شريط البحث + زر السلة -->
+    <header class="sticky top-0 z-40 glass-panel border-b border-white/70 px-4 sm:px-6 lg:px-8 py-3">
+        <div class="max-w-[1600px] mx-auto flex flex-wrap items-center justify-between gap-3">
+            
+            <!-- القسم الأيمن: زر القائمة للموبايل + اللوجو -->
+            <div class="flex items-center gap-3">
+                <button id="mobile-menu-btn" aria-label="فتح القائمة" class="lg:hidden p-2.5 rounded-xl bg-white/60 hover:bg-white text-pink-600 border border-pink-200/70 shadow-sm transition active:scale-95">
+                    <i class="fa-solid fa-bars text-lg"></i>
+                </button>
+
+                <!-- الشعار (Logo) -->
+                <a href="#" onclick="resetFilters(event)" class="flex items-center gap-2.5 group">
+                    <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-pink-500 to-rose-400 flex items-center justify-center text-white shadow-md shadow-pink-500/25 group-hover:rotate-6 transition-transform">
+                        <svg class="w-6 h-6 fill-current" viewBox="0 0 24 24">
+                            <path d="M12,2C13.8,2 15.2,3.4 15.2,5.2C15.2,5.6 15.1,6 15,6.4C15.4,6.3 15.8,6.2 16.2,6.2C18,6.2 19.4,7.6 19.4,9.4C19.4,10.8 18.5,12 17.3,12.4C18.5,12.8 19.4,14 19.4,15.4C19.4,17.2 18,18.6 16.2,18.6C15.8,18.6 15.4,18.5 15,18.4C15.1,18.8 15.2,19.2 15.2,19.6C15.2,21.4 13.8,22.8 12,22.8C10.2,22.8 8.8,21.4 8.8,19.6C8.8,19.2 8.9,18.8 9,18.4C8.6,18.5 8.2,18.6 7.8,18.6C6,18.6 4.6,17.2 4.6,15.4C4.6,14 5.5,12.8 6.7,12.4C5.5,12 4.6,10.8 4.6,9.4C4.6,7.6 6,6.2 7.8,6.2C8.2,6.2 8.6,6.3 9,6.4C8.9,6 8.8,5.6 8.8,5.2C8.8,3.4 10.2,2 12,2M12,9.5A2.9,2.9 0 0,0 9.1,12.4A2.9,2.9 0 0,0 12,15.3A2.9,2.9 0 0,0 14.9,12.4A2.9,2.9 0 0,0 12,9.5Z"/>
+                        </svg>
+                    </div>
+                    <div class="flex flex-col">
+                        <span class="font-playfair font-bold text-xl sm:text-2xl tracking-wide bg-gradient-to-l from-pink-600 to-rose-500 bg-clip-text text-transparent leading-none">
+                            Pink Flower
+                        </span>
+                        <span class="text-xs font-bold text-pink-700/80 mt-0.5">بينك فلاور للورود</span>
+                    </div>
+                </a>
+            </div>
+
+            <!-- المنتصف: شريط البحث المدمج مع شعار مصغر بداخله -->
+            <div class="order-3 md:order-2 w-full md:w-auto md:flex-1 md:max-w-xl lg:max-w-2xl">
+                <div class="relative flex items-center w-full">
+                    <div class="absolute right-3 flex items-center gap-1.5 pointer-events-none text-pink-500 border-l border-pink-200/80 pl-2.5">
+                        <i class="fa-solid fa-spa text-sm"></i>
+                        <span class="hidden sm:inline text-xs font-bold text-pink-600/80">Pink Flower</span>
+                    </div>
+                    
+                    <input 
+                        type="text" 
+                        id="search-input" 
+                        placeholder="ابحث عن بوكيه، ورد جوري، هدايا..." 
+                        class="glass-input w-full rounded-2xl py-2.5 pr-12 sm:pr-32 pl-10 text-sm sm:text-base text-slate-700 placeholder-slate-400"
+                    >
+                    
+                    <button id="clear-search-btn" class="hidden absolute left-9 text-slate-400 hover:text-pink-600 p-1 transition" title="مسح البحث">
+                        <i class="fa-solid fa-circle-xmark"></i>
+                    </button>
+
+                    <div class="absolute left-3 text-pink-500 pointer-events-none">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- القسم الأيسر: زر سلة المشتريات -->
+            <div class="order-2 md:order-3 flex items-center gap-2">
+                <button id="open-cart-btn" class="relative flex items-center gap-2.5 px-4 py-2.5 rounded-2xl bg-gradient-to-l from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white font-semibold shadow-lg shadow-pink-500/25 transition active:scale-95">
+                    <i class="fa-solid fa-bag-shopping text-lg"></i>
+                    <span class="hidden sm:inline text-sm">سلة الورود</span>
+                    <span id="cart-badge" class="inline-flex items-center justify-center min-w-[22px] h-[22px] px-1.5 text-xs font-bold bg-white text-pink-600 rounded-full shadow-sm">
+                        0
+                    </span>
+                </button>
+            </div>
+
+        </div>
+    </header>
+
+    <!-- الحاوية الرئيسية (السايد بار + محتوى المنتجات) -->
+    <div class="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col lg:flex-row gap-6 relative">
+
+        <!-- خلفية معتمة عند فتح السايد بار في الموبايل -->
+        <div id="sidebar-backdrop" class="fixed inset-0 bg-pink-950/25 backdrop-blur-xs z-40 hidden lg:hidden transition-opacity"></div>
+
+        <!-- القائمة الجانبية (Sidebar) للأقسام الخمسة -->
+        <aside id="sidebar" class="fixed lg:sticky top-0 lg:top-[84px] right-0 z-50 lg:z-30 h-full lg:h-[calc(100vh-108px)] w-72 sm:w-80 lg:w-72 shrink-0 glass-panel lg:rounded-3xl p-5 flex flex-col justify-between transform translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out overflow-y-auto">
+            
+            <div>
+                <!-- رأس السايد بار في الموبايل -->
+                <div class="flex items-center justify-between lg:hidden pb-4 mb-4 border-b border-pink-200/60">
+                    <div class="flex items-center gap-2">
+                        <span class="w-8 h-8 rounded-xl bg-pink-500 text-white flex items-center justify-center">
+                            <i class="fa-solid fa-spa"></i>
+                        </span>
+                        <span class="font-bold text-pink-700">أقسام المتجر</span>
+                    </div>
+                    <button id="close-sidebar-btn" class="p-2 rounded-xl bg-white/70 text-slate-600 hover:text-pink-600">
+                        <i class="fa-solid fa-xmark text-lg"></i>
+                    </button>
+                </div>
+
+                <div class="mb-4 px-2">
+                    <h2 class="text-xs font-bold uppercase tracking-wider text-pink-600/80 mb-1">تصفح حسب القسم</h2>
+                    <p class="text-sm font-bold text-slate-700">تشكيلة بينك فلاور المختارة</p>
+                </div>
+
+                <!-- قائمة الأقسام (الكل + 5 أقسام رئيسية) -->
+                <nav id="category-list" class="space-y-2">
+                    <!-- يتم توليد الأزرار ديناميكياً عبر JS -->
+                </nav>
+            </div>
+
+            <!-- بطاقة تنفيذ حسب الصورة وتواصل سريع أسفل السايد بار -->
+            <div class="mt-6 p-4 rounded-2xl bg-gradient-to-br from-pink-500/15 to-rose-500/15 border border-white/80 text-center">
+                <div class="w-10 h-10 mx-auto mb-2 rounded-full bg-white/85 text-pink-600 flex items-center justify-center shadow-sm">
+                    <i class="fa-solid fa-camera-retro text-lg"></i>
+                </div>
+                <h3 class="text-sm font-extrabold text-slate-800">ابعتلنا صورتك وإحنا هننفذهالك!</h3>
+                <p class="text-xs text-slate-600 mt-1 mb-3 leading-relaxed">عندك صورة بوكيه عاجبك؟ ابعتهالنا على واتساب وهننفذهالك بنفس الشكل والتفاصيل</p>
+                <div class="space-y-2">
+                    <a href="https://wa.me/201031656288?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D9%8B%20Pink%20Flower%20%F0%9F%8C%B8%D8%8C%20%D8%B9%D9%86%D8%AF%D9%8A%20%D8%B5%D9%88%D8%B1%D8%A9%20%D8%A8%D9%88%D9%83%D9%8A%D9%87%20%D9%88%D8%AD%D8%A7%D8%A8%D8%A8%20%D8%AA%D9%86%D9%81%D8%B0%D9%88%D9%87%D8%A7%D9%84%D9%8A%20%D8%A8%D9%86%D9%81%D8%B3%20%D8%A7%D9%84%D8%B4%D9%83%D9%84" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-1.5 w-full py-2 px-3 rounded-xl bg-green-500 hover:bg-green-600 text-white text-xs font-bold shadow-sm transition">
+                        <i class="fa-brands fa-whatsapp text-sm"></i>
+                        <span>ابعت صورتك على واتساب</span>
+                    </a>
+                    <a href="https://share.google/hLShrIC1FLUFRH5rX" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-1.5 w-full py-2 px-3 rounded-xl bg-[#1877F2] hover:bg-[#166fe5] text-white text-xs font-bold shadow-sm transition">
+                        <i class="fa-brands fa-facebook text-sm"></i>
+                        <span>صفحتنا على فيسبوك</span>
+                    </a>
+                </div>
+            </div>
+        </aside>
+
+        <!-- المحتوى الرئيسي -->
+        <main class="flex-1 min-w-0">
+            
+            <!-- شريط إعلاني بارز للتوصيل داخل القاهرة والجيزة وزيارة الفرع -->
+            <div class="glass-panel rounded-2xl px-4 py-3 mb-4 border border-pink-300/60 bg-gradient-to-l from-pink-500/10 via-white/60 to-rose-500/10 flex flex-wrap items-center justify-between gap-2 text-xs sm:text-sm">
+                <div class="flex flex-wrap items-center gap-3 sm:gap-5">
+                    <span class="inline-flex items-center gap-1.5 font-bold text-pink-700">
+                        <i class="fa-solid fa-truck-fast text-pink-500"></i>
+                        <span>توصيل سريع متاح داخل القاهرة والجيزة</span>
+                    </span>
+                    <span class="hidden sm:inline text-pink-300">|</span>
+                    <span class="inline-flex items-center gap-1.5 font-bold text-rose-700">
+                        <i class="fa-solid fa-store text-rose-500"></i>
+                        <span>يسعدنا تشريفكم وزيارتكم في الفرع مباشرة</span>
+                    </span>
+                </div>
+                <a href="#visit-delivery-section" class="text-xs font-extrabold text-pink-600 hover:text-pink-800 underline underline-offset-4 transition">
+                    تفاصيل الفرع والتوصيل <i class="fa-solid fa-arrow-down mr-1"></i>
+                </a>
+            </div>
+
+            <!-- بانر ترحيبي زجاجي أنيق -->
+            <section class="glass-panel rounded-3xl p-6 sm:p-8 mb-6 relative overflow-hidden">
+                <div class="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+                    <div>
+                        <div class="flex flex-wrap items-center gap-2 mb-3">
+                            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-pink-500/15 text-pink-700 text-xs font-bold border border-pink-300/50">
+                                <i class="fa-solid fa-truck"></i> توصيل القاهرة والجيزة
+                            </span>
+                            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-rose-500/15 text-rose-700 text-xs font-bold border border-rose-300/50">
+                                <i class="fa-solid fa-shop"></i> متاح الشراء والاستلام من الفرع
+                            </span>
+                        </div>
+                        <h1 class="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-slate-800 leading-tight">
+                            عبّر عن مشاعرك بأرقى <span class="text-pink-600">باقات الورود</span>
+                        </h1>
+                        <p class="text-slate-600 text-sm sm:text-base mt-2 max-w-2xl">
+                            اختر باقتك المفضلة من بين 5 أقسام متنوعة، أضفها لسلتك، وحدد التوصيل لباب بيتك في القاهرة والجيزة أو شرفنا بزيارتك في الفرع عبر واتساب بضغطة زر.
+                        </p>
+                    </div>
+                    <div class="flex items-center gap-3 self-end md:self-center">
+                        <div class="glass-card px-4 py-3 rounded-2xl text-center">
+                            <span class="block text-xl font-extrabold text-pink-600">100%</span>
+                            <span class="text-xs font-semibold text-slate-600">ورود طبيعية طازجة</span>
+                        </div>
+                    </div>
+                </div>
+                <i class="fa-solid fa-spa absolute -left-6 -bottom-6 text-9xl text-pink-400/10 pointer-events-none"></i>
+            </section>
+
+            <!-- بطاقة تنفيذ الباقات حسب الصورة: ابعتلنا صورتك وإحنا هننفذهالك -->
+            <section class="glass-panel rounded-3xl p-5 sm:p-6 mb-6 border border-pink-300/70 bg-gradient-to-l from-pink-500/10 via-white/65 to-rose-500/15 relative overflow-hidden">
+                <div class="relative z-10 flex flex-col sm:flex-row items-center justify-between gap-4">
+                    <div class="flex items-center gap-4 text-center sm:text-right flex-col sm:flex-row">
+                        <div class="w-14 h-14 shrink-0 rounded-2xl bg-gradient-to-tr from-pink-500 to-rose-500 text-white flex items-center justify-center text-2xl shadow-lg shadow-pink-500/25">
+                            <i class="fa-solid fa-camera-retro"></i>
+                        </div>
+                        <div>
+                            <span class="inline-block px-2.5 py-0.5 rounded-full bg-pink-500/15 text-pink-700 text-[11px] font-extrabold mb-1">
+                                ✨ تفصيل وتنسيق حسب طلبك
+                            </span>
+                            <h2 class="text-lg sm:text-xl font-extrabold text-slate-800">
+                                ابعتلنا صورتك وإحنا هننفذهالك! 🌸
+                            </h2>
+                            <p class="text-xs sm:text-sm text-slate-600 mt-1 max-w-xl">
+                                شفت صورة بوكيه أو بوكس ورد عجبك في أي مكان؟ ابعتلنا صورته على واتساب وفريقنا المحترف هينفذهولك بنفس الألوان والتفاصيل وبأعلى جودة.
+                            </p>
+                        </div>
+                    </div>
+                    <a href="https://wa.me/201031656288?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D9%8B%20Pink%20Flower%20%F0%9F%8C%B8%D8%8C%20%D8%B9%D9%86%D8%AF%D9%8A%20%D8%B5%D9%88%D8%B1%D8%A9%20%D8%A8%D9%88%D9%83%D9%8A%D9%87%20%D9%88%D8%AD%D8%A7%D8%A8%D8%A8%20%D8%AA%D9%86%D9%81%D8%B0%D9%88%D9%87%D8%A7%D9%84%D9%8A%20%D8%A8%D9%86%D9%81%D8%B3%20%D8%A7%D9%84%D8%B4%D9%83%D9%84" target="_blank" rel="noopener noreferrer" class="shrink-0 w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3 rounded-2xl bg-gradient-to-l from-[#25D366] to-[#128C7E] hover:from-[#20bd5a] hover:to-[#0e7266] text-white font-bold text-xs sm:text-sm shadow-lg shadow-green-500/25 transition transform active:scale-95">
+                        <i class="fa-brands fa-whatsapp text-lg"></i>
+                        <span>ابعت الصورة الآن عبر واتساب</span>
+                    </a>
+                </div>
+            </section>
+
+            <!-- شريط معلومات الفلترة الحالي -->
+            <div class="flex flex-wrap items-center justify-between gap-3 mb-5 px-1">
+                <div class="flex items-center gap-2">
+                    <h2 id="current-category-title" class="text-lg sm:text-xl font-bold text-slate-800">جميع الورود والباقات</h2>
+                    <span id="products-count" class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-white/70 text-pink-600 border border-pink-200/70">
+                        0 منتج
+                    </span>
+                </div>
+
+                <!-- أزرار اختصار سريعة للأقسام على الشاشات الصغيرة -->
+                <div class="flex lg:hidden items-center gap-2 overflow-x-auto pb-1 max-w-full" id="mobile-pills"></div>
+            </div>
+
+            <!-- شبكة عرض المنتجات -->
+            <div id="products-grid" class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-5"></div>
+
+            <!-- زر المزيد عبر واتساب أسفل المنتجات -->
+            <div class="mt-8 glass-panel rounded-3xl p-6 text-center border border-pink-300/60 bg-gradient-to-l from-pink-500/10 via-white/70 to-rose-500/10">
+                <div class="max-w-xl mx-auto">
+                    <div class="w-12 h-12 mx-auto mb-3 rounded-2xl bg-green-500 text-white flex items-center justify-center text-xl shadow-md shadow-green-500/25">
+                        <i class="fa-brands fa-whatsapp"></i>
+                    </div>
+                    <h3 class="text-base sm:text-lg font-extrabold text-slate-800 mb-1">
+                        هل تبحث عن تصميم أو باقة أخرى غير موجودة؟
+                    </h3>
+                    <p class="text-xs sm:text-sm text-slate-600 mb-4 leading-relaxed">
+                        لدينا تشكيلة واسعة جداً من التصاميم الخاصة. راسلنا عبر واتساب وسنرسل لك المزيد من الصور والخيارات المناسبة لمناسبتك.
+                    </p>
+                    <a href="https://wa.me/201031656288?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D9%8B%20Pink%20Flower%20%F0%9F%8C%B8%D8%8C%20%D8%A3%D8%B1%D9%8A%D8%AF%20%D8%B1%D8%A4%D9%8A%D8%A9%20المزيد%20%D9%85%D9%86%20%D8%A7%D9%84%D8%A8%D8%A7%D9%82%D8%A7%D8%AA%20%D9%88%D8%A7%D9%84%D8%AA%D8%B3%D8%A7%D9%85%D9%8A%D9%85%20%D8%A7%D9%84%D8%A5%D8%B6%D8%A7%D9%81%D9%8A%D8%A9" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-2.5 px-6 py-3 rounded-2xl bg-gradient-to-l from-[#25D366] to-[#128C7E] hover:from-[#20bd5a] hover:to-[#0e7266] text-white font-bold text-xs sm:text-sm shadow-lg shadow-green-500/25 transition transform active:scale-95">
+                        <i class="fa-brands fa-whatsapp text-lg"></i>
+                        <span>للمزيد راسلنا عبر واتساب</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- مؤشر تحميل المنتجات من Google Sheet -->
+            <div id="loading-state" class="hidden glass-panel rounded-3xl p-12 text-center my-6">
+                <div class="w-14 h-14 mx-auto mb-3 rounded-full border-4 border-pink-200 border-t-pink-500 animate-spin"></div>
+                <h3 class="text-base font-bold text-slate-800">جاري تحميل أحدث الباقات والأسعار...</h3>
+            </div>
+
+            <!-- حالة عدم وجود نتائج بحث -->
+            <div id="empty-state" class="hidden glass-panel rounded-3xl p-12 text-center my-6">
+                <div class="w-16 h-16 mx-auto mb-4 rounded-2xl bg-pink-100 text-pink-500 flex items-center justify-center text-3xl">
+                    <i class="fa-solid fa-seedling"></i>
+                </div>
+                <h3 class="text-lg font-bold text-slate-800">لم نجد باقة تطابق بحثك</h3>
+                <p class="text-sm text-slate-600 mt-1 mb-4">جرب البحث بكلمة أخرى أو ابعتلنا صورة الباقة اللي في بالك وهننفذهالك فوراً!</p>
+                <button onclick="resetFilters()" class="px-5 py-2.5 rounded-xl bg-pink-500 hover:bg-pink-600 text-white text-sm font-bold shadow-md transition">
+                    عرض جميع المنتجات
+                </button>
+            </div>
+
+            <!-- قسم التوصيل داخل القاهرة والجيزة وزيارة الفرع -->
+            <section id="visit-delivery-section" class="mt-10 grid grid-cols-1 md:grid-cols-2 gap-5">
+                
+                <!-- بطاقة التوصيل داخل القاهرة والجيزة -->
+                <div class="glass-panel rounded-3xl p-6 flex flex-col justify-between relative overflow-hidden">
+                    <div>
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-pink-500 to-rose-400 text-white flex items-center justify-center text-xl shadow-md shadow-pink-500/20">
+                                <i class="fa-solid fa-truck-fast"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-extrabold text-slate-800">توصيل سريع داخل القاهرة والجيزة</h3>
+                                <span class="text-xs font-bold text-pink-600">توصيل آمن ومبرد للحفاظ على نضارة الورد</span>
+                            </div>
+                        </div>
+                        <p class="text-sm text-slate-600 leading-relaxed mb-4">
+                            نوصل باقاتك وهداياك لأي مكان في جميع أحياء <strong>القاهرة والجيزة</strong> في نفس اليوم أو في الموعد المحدد لمفاجأتك، مع تغليف أنيق يضمن وصول الورد بأجمل صورة.
+                        </p>
+                        <ul class="space-y-2 text-xs sm:text-sm text-slate-700 mb-5">
+                            <li class="flex items-center gap-2">
+                                <i class="fa-solid fa-circle-check text-pink-500"></i>
+                                <span>تغطية شاملة لجميع مناطق القاهرة الكبرى والجيزة</span>
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <i class="fa-solid fa-circle-check text-pink-500"></i>
+                                <span>إمكانية إرسال الباقة كهدية مباشرة لمن تحب</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <a href="https://wa.me/201031656288?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D9%8B%20Pink%20Flower%D8%8C%20%D8%A3%D8%B1%D9%8A%D8%AF%20%D8%A7%D9%84%D8%A7%D8%B3%D8%AA%D9%81%D8%B3%D8%A7%D8%B1%20%D8%B9%D9%86%20%D8%AA%D9%83%D9%84%D9%81%D8%A9%20%D9%88%D9%85%D9%88%D8%A7%D8%B9%D9%8A%D8%AF%20%D8%A7%D9%84%D8%AA%D9%88%D8%B5%D9%8A%D9%84%20%D8%AF%D8%A7%D8%AE%D9%84%20%D8%A7%D9%84%D9%82%D8%A7%D9%87%D8%B1%D8%A9%20%D9%88%D8%A7%D9%84%D8%AC%D9%8A%D8%B2%D8%A9" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-2 w-full py-2.5 px-4 rounded-2xl bg-white/75 hover:bg-white text-pink-600 font-bold text-xs sm:text-sm border border-pink-200 shadow-xs transition">
+                        <i class="fa-brands fa-whatsapp text-green-500 text-base"></i>
+                        <span>استفسر عن رسوم التوصيل لمنطقتك</span>
+                    </a>
+                </div>
+
+                <!-- بطاقة زيارة الفرع -->
+                <div class="glass-panel rounded-3xl p-6 flex flex-col justify-between relative overflow-hidden">
+                    <div>
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-rose-500 to-pink-500 text-white flex items-center justify-center text-xl shadow-md shadow-rose-500/20">
+                                <i class="fa-solid fa-store"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-extrabold text-slate-800">تشرفنا زيارتكم في الفرع</h3>
+                                <span class="text-xs font-bold text-rose-600">اختر ورودك بنفسك أو استلم طلبك جاهزاً</span>
+                            </div>
+                        </div>
+                        <p class="text-sm text-slate-600 leading-relaxed mb-4">
+                            يسعدنا استقبالكم يومياً في فرع <strong>Pink Flower</strong> لمشاهدة تشكيلة الورود الطبيعية وتنسيق باقتك الخاصة أمامك أو استلام طلبك المحجوز مسبقاً بدون انتظار.
+                        </p>
+                        <div class="space-y-2 text-xs sm:text-sm text-slate-700 mb-5 bg-white/45 p-3 rounded-2xl border border-white/70">
+                            <div class="flex items-center gap-2">
+                                <i class="fa-solid fa-clock text-rose-500"></i>
+                                <span><strong>مواعيد العمل:</strong> يومياً من 10:00 صباحاً حتى 12:00 منتصف الليل</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <i class="fa-solid fa-location-dot text-rose-500"></i>
+                                <span><strong>الموقع:</strong> <a href="https://maps.app.goo.gl/TyDL6QeGfox8VXWB7" target="_blank" rel="noopener noreferrer" class="text-pink-600 hover:text-pink-800 underline font-bold">اضغط هنا لفتح الموقع على خرائط جوجل</a></span>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="https://maps.app.goo.gl/TyDL6QeGfox8VXWB7" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-2 w-full py-2.5 px-4 rounded-2xl bg-gradient-to-l from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white font-bold text-xs sm:text-sm shadow-md shadow-pink-500/20 transition">
+                        <i class="fa-solid fa-map-location-dot text-base"></i>
+                        <span>افتح لوكيشن الفرع على Google Maps</span>
+                    </a>
+                </div>
+
+            </section>
+
+        </main>
+    </div>
+
+    <!-- تذييل الصفحة (Footer) -->
+    <footer class="glass-panel border-t border-white/70 mt-12 py-6 px-4 text-center">
+        <div class="max-w-4xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 text-sm text-slate-600">
+            <div class="flex items-center gap-2 font-bold text-pink-600">
+                <i class="fa-solid fa-spa"></i>
+                <span>Pink Flower - بينك فلاور</span>
+            </div>
+            <p class="text-xs sm:text-sm">توصيل القاهرة والجيزة • متاح زيارة الفرع • © 2026</p>
+            <div class="flex items-center gap-2.5">
+                <a href="https://share.google/hLShrIC1FLUFRH5rX" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/75 hover:bg-[#1877F2] text-[#1877F2] hover:text-white border border-blue-200/70 text-xs font-bold shadow-2xs transition">
+                    <i class="fa-brands fa-facebook text-sm"></i>
+                    <span>فيسبوك</span>
+                </a>
+                <a href="https://wa.me/201031656288" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/75 hover:bg-[#25D366] text-[#128C7E] hover:text-white border border-green-200/70 text-xs font-bold shadow-2xs transition">
+                    <i class="fa-brands fa-whatsapp text-sm"></i>
+                    <span>واتساب</span>
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- خلفية معتمة للسلة الجانبية -->
+    <div id="cart-backdrop" class="fixed inset-0 bg-pink-950/30 backdrop-blur-xs z-40 hidden transition-opacity"></div>
+
+    <!-- نافذة السلة الجانبية (Slide-out Cart Drawer) مع زر واتساب بدلاً من الشيك اوت -->
+    <div id="cart-drawer" class="fixed top-0 left-0 h-full w-full sm:w-[420px] glass-drawer z-50 transform -translate-x-full transition-transform duration-300 ease-in-out flex flex-col shadow-2xl border-r border-white/80">
+        
+        <!-- رأس السلة -->
+        <div class="p-4 sm:p-5 border-b border-pink-200/70 flex items-center justify-between bg-white/60">
+            <div class="flex items-center gap-2.5">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-pink-500 to-rose-400 text-white flex items-center justify-center shadow-sm">
+                    <i class="fa-solid fa-bag-shopping text-lg"></i>
+                </div>
+                <div>
+                    <h2 class="font-extrabold text-base sm:text-lg text-slate-800">سلة الورود</h2>
+                    <p class="text-xs text-slate-500">مراجعة باقاتك المختارة</p>
+                </div>
+            </div>
+            <button id="close-cart-btn" aria-label="إغلاق السلة" class="p-2 rounded-xl bg-white/80 hover:bg-white text-slate-600 hover:text-pink-600 transition">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+        </div>
+
+        <!-- قائمة عناصر السلة -->
+        <div id="cart-items-container" class="flex-1 overflow-y-auto p-4 sm:p-5 space-y-3"></div>
+
+        <!-- أسفل السلة: الإجمالي + طريقة الاستلام + زر واتساب المباشر بدلاً من الشيك اوت -->
+        <div id="cart-footer" class="p-4 sm:p-5 border-t border-pink-200/70 bg-white/80 backdrop-blur-md space-y-3">
+            
+            <!-- اختيار طريقة الاستلام: توصيل داخل القاهرة والجيزة أو زيارة الفرع -->
+            <div>
+                <label class="block text-xs font-bold text-slate-700 mb-1.5">
+                    <i class="fa-solid fa-route text-pink-500 ml-1"></i> طريقة الاستلام:
+                </label>
+                <div class="grid grid-cols-2 gap-2">
+                    <label class="cursor-pointer">
+                        <input type="radio" name="delivery-method" value="delivery" checked onchange="toggleDeliveryAddress()" class="peer sr-only">
+                        <div class="p-2 rounded-xl border border-pink-200 bg-white/60 text-center text-xs font-bold text-slate-600 peer-checked:bg-pink-500 peer-checked:text-white peer-checked:border-pink-500 peer-checked:shadow-xs transition">
+                            <i class="fa-solid fa-truck-fast block mb-0.5 text-sm"></i>
+                            توصيل القاهرة والجيزة
+                        </div>
+                    </label>
+                    <label class="cursor-pointer">
+                        <input type="radio" name="delivery-method" value="branch" onchange="toggleDeliveryAddress()" class="peer sr-only">
+                        <div class="p-2 rounded-xl border border-pink-200 bg-white/60 text-center text-xs font-bold text-slate-600 peer-checked:bg-rose-500 peer-checked:text-white peer-checked:border-rose-500 peer-checked:shadow-xs transition">
+                            <i class="fa-solid fa-store block mb-0.5 text-sm"></i>
+                            استلام وزيارة الفرع
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <!-- حقول رقم الهاتف والعنوان تظهر عند اختيار التوصيل داخل القاهرة والجيزة -->
+            <div id="delivery-address-wrapper" class="space-y-2.5">
+                <div>
+                    <label for="customer-phone" class="block text-xs font-bold text-slate-700 mb-1">
+                        <i class="fa-solid fa-phone text-pink-500 ml-1"></i> رقم الهاتف للتواصل (مطلوب للتوصيل): <span class="text-rose-500">*</span>
+                    </label>
+                    <input type="tel" id="customer-phone" dir="ltr" placeholder="01xxxxxxxxx" class="glass-input w-full rounded-xl px-3 py-2 text-xs text-slate-700 text-right">
+                </div>
+                <div>
+                    <label for="delivery-address" class="block text-xs font-bold text-slate-700 mb-1">
+                        <i class="fa-solid fa-location-dot text-pink-500 ml-1"></i> المنطقة / العنوان بالتفصيل (القاهرة أو الجيزة): <span class="text-rose-500">*</span>
+                    </label>
+                    <input type="text" id="delivery-address" placeholder="مثال: مدينة نصر، المعادي، المهندسين، الشيخ زايد..." class="glass-input w-full rounded-xl px-3 py-2 text-xs text-slate-700">
+                </div>
+            </div>
+
+            <!-- حقل اختياري لإضافة رسالة إهداء مع الباقة -->
+            <div>
+                <label for="gift-note" class="block text-xs font-bold text-slate-700 mb-1">
+                    <i class="fa-solid fa-pen-nib text-pink-500 ml-1"></i> رسالة بطاقة الإهداء (اختياري):
+                </label>
+                <input type="text" id="gift-note" placeholder="اكتب عبارة جميلة تُرفق مع الورد..." class="glass-input w-full rounded-xl px-3 py-2 text-xs text-slate-700">
+            </div>
+
+            <!-- تفاصيل السعر -->
+            <div class="space-y-1 text-sm pt-1">
+                <div class="flex justify-between text-slate-600 text-xs">
+                    <span>عدد الباقات:</span>
+                    <span id="cart-total-count" class="font-bold text-slate-800">0</span>
+                </div>
+                <div class="flex justify-between items-center text-base font-extrabold text-slate-800 pt-1.5 border-t border-pink-100">
+                    <span>الإجمالي التقديري:</span>
+                    <span id="cart-total-price" class="text-xl text-pink-600">0 ج.م</span>
+                </div>
+            </div>
+
+            <!-- الزر الرئيسي: يوديك للواتساب مباشرة بدلاً من الشيك اوت -->
+            <button id="whatsapp-order-btn" onclick="orderViaWhatsApp()" class="w-full py-3 px-5 rounded-2xl bg-gradient-to-l from-[#25D366] to-[#128C7E] hover:from-[#20bd5a] hover:to-[#0e7266] text-white font-bold text-sm sm:text-base shadow-lg shadow-green-500/30 flex items-center justify-center gap-2.5 transition transform active:scale-[0.98]">
+                <i class="fa-brands fa-whatsapp text-2xl"></i>
+                <span>اطلب الآن عبر واتساب</span>
+            </button>
+
+            <p class="text-[11px] text-center text-slate-500">
+                سيتم تحويلك إلى واتساب المتجر مع تفاصيل طلبك ورقمك وعنوانك
+            </p>
+        </div>
+
+    </div>
+
+    <!-- كود الجافاسكريبت لإدارة المتجر، الأقسام، البحث، السلة، وواتساب -->
+    <script>
+        // رقم واتساب المتجر
+        const STORE_WHATSAPP_NUMBER = "201031656288";
+
+        // 🔗 ضع هنا رابط Google Sheet المنشور بصيغة CSV لإدارة الـ 70 منتجاً بسهولة من موبايلك!
+        // اتركه فارغاً '' لعرض المنتجات التجريبية الافتراضية
+        const GOOGLE_SHEET_CSV_URL = "";
+
+        // 1. تعريف الأقسام + قسم الكل
+        const categories = [
+            { id: 'all', name: 'جميع الأقسام', icon: 'fa-border-all' },
+            { id: 'romantic', name: 'بوكيهات رومانسية', icon: 'fa-heart' },
+            { id: 'wedding', name: 'ورود المناسبات والأفراح', icon: 'fa-heart-circle-check' },
+            { id: 'indoor', name: 'نباتات داخلية', icon: 'fa-seedling' },
+            { id: 'giftboxes', name: 'صناديق هدايا فاخرة', icon: 'fa-gift' },
+            { id: 'vases', name: 'فازات', icon: 'fa-wine-glass' },
+            { id: 'chocolate', name: 'بوكيه شوكولاته', icon: 'fa-candy-cane' }
+        ];
+
+        // 2. قائمة المنتجات المحددة الخاصة بك
+        let products = [
+            {
+                id: 1,
+                name: 'بوكيه احمر ابيض',
+                category: 'romantic',
+                categoryName: 'بوكيهات رومانسية',
+                price: 650,
+                description: 'تشكيلة ساحرة من الجوري الوردي الفاتح والبيبي روز ملفوفة بورق حريري شفاف.',
+                image: 'img/romantic/ABMX8195.JPG',
+                badge: 'الأكثر مبيعاً'
+            },
+            {
+                id: 2,
+                name: 'بوكيه ورد احمر ابيض',
+                category: 'romantic',
+                categoryName: 'بوكيهات رومانسية',
+                price: 500,
+                description: '24 وردة جوري حمراء طبيعية تعبر عن أصدق مشاعر الحب والرومانسية.',
+                image: 'img/romantic/AYXA0244.JPG',
+                badge: 'رومانسي'
+            },
+            {
+                id: 3,
+                name: 'بوكيه عروس الأبيض',
+                category: 'wedding',
+                categoryName: 'ورود المناسبات والأفراح',
+                price: 1000,
+                description: 'باقة يد للعروس من التوليب الأبيض والأوركيد الملكي بلمسة لؤلؤية ناعمة.',
+                image: 'img/wedding/IMG_1211.JPG',
+                badge: 'للعرائس'
+            },
+            {
+                id: 4,
+                name: 'ستاند تهنئة المناسبات السعيدة',
+                category: 'wedding',
+                categoryName: 'ورود المناسبات والأفراح',
+                price: 1550,
+                description: 'تنسيق فخم بارتفاع متكامل من الليليوم والروز الباستيل لحفلات الخطوبة والافتتاح.',
+                image: 'img/wedding/CTMM5415.JPG',
+                badge: 'فخم'
+            },
+            {
+                id: 5,
+                name: 'نبتة الأوركيد الفوشيا',
+                category: 'indoor',
+                categoryName: 'نباتات داخلية',
+                price: 200,
+                description: 'نبتة أوركيد طبيعية مزهرة في أصيص سيراميك أبيض أنيق تضفي حياة لمنزلك.',
+                image: 'https://images.unsplash.com/photo-1566907225472-514215c9e5cd?auto=format&fit=crop&w=600&q=80',
+                badge: 'طويلة العمر'
+            },
+            {
+                id: 6,
+                name: 'نبتة المونستيرا الاستوائية',
+                category: 'indoor',
+                categoryName: 'نباتات داخلية',
+                price: 450,
+                description: 'نبتة داخلية سهلة العناية تنقي الهواء وتمنح لمسة عصرية للمكاتب وغرف المعيشة.',
+                image: 'https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=600&q=80',
+                badge: 'ديكور منزلي'
+            },
+            {
+                id: 7,
+                name: 'بوكس السعادة ورد وشوكولاتة',
+                category: 'giftboxes',
+                categoryName: 'صناديق هدايا فاخرة',
+                price: 750,
+                description: 'صندوق يجمع بين ورود روز وقطع الشوكولاتة البلجيكية الفاخرة.',
+                image: 'img/chocolate/IMG_1221.JPG',
+                badge: 'هدية مثالية'
+            },
+            {
+                id: 8,
+                name: 'صندوق بينك فلاور المخملي',
+                category: 'giftboxes',
+                categoryName: 'صناديق هدايا فاخرة',
+                price: 840,
+                description: 'علبة هدايا دائرية مكسوة بالمخمل الوردي مع تنسيق كثيف من الورد المنعش.',
+                image: 'img/chocolate/IMG_1220.JPG',
+                badge: 'إصدار خاص'
+            },
+            {
+                id: 9,
+                name: 'فازة كريستال بالروز الوردي',
+                category: 'vases',
+                categoryName: 'فازات',
+                price: 780,
+                description: 'فازة زجاجي أنيقة منسقة بأجمل ورود المنعش.',
+                image: 'img/vases/IMG_1215.JPG',
+                badge: 'ديكور راقي'
+            },
+            {
+                id: 11,
+                name: 'بوكيه XL',
+                category: 'romantic',
+                categoryName: 'بوكيهات رومانسية',
+                price: 1500,
+                description: 'باقة تتكون من اكثر من 100 وردة روز حمراء',
+                image: 'img/romantic/SALQ1275.JPG',
+                badge: ''
+            },
+            {
+                id: 12,
+                name: 'صندوق مفاجأة التخرج والنجاح',
+                category: 'giftboxes',
+                categoryName: 'صناديق هدايا فاخرة',
+                price: 1250,
+                description: 'تنسيق مبهج من عباد الشمس والروز الوردي مع بطاقة تهنئة ذهبية فاخرة.',
+                image: 'img/chocolate/IMG_1217.JPG',
+                badge: 'مناسبات'
+            },
+            {
+                id: 13,
+                name: 'بوكيه شوكولاته فيريرو روشيه',
+                category: 'chocolate',
+                categoryName: 'بوكيه شوكولاته',
+                price: 700,
+                description: 'بوكيه ساحر يجمع بين كرات شوكولاتة فيريرو روشيه الذهبية وورود الجوري الأحمر الفاخرة.',
+                image: 'img/chocolate/IMG_1218.JPG',
+                badge: 'الأكثر طلباً'
+            },
+            {
+                id: 14,
+                name: 'بوكيه شوكولاته كيندر والبينك روز',
+                category: 'chocolate',
+                categoryName: 'بوكيه شوكولاته',
+                price: 800,
+                description: 'تنسيق مبهج من شوكولاتة كيندر المتنوعة مع ورد البيبي روز الاحمر أنيق.',
+                image: 'img/chocolate/JPUG6087.JPG',
+                badge: 'مميز'
+            },
+            {
+                id: 15,
+                name: 'بوكيه ابيض احمر',
+                category: 'romantic',
+                categoryName: 'بوكيهات رومانسية',
+                price: 600,
+                description: 'تنسيق أنيق من الورود الحمراء والبيضاء.',
+                image: 'img/romantic/YCSO6851.JPG',
+                badge: 'مميز'
+            },
+            {
+                id: 16,
+                name: 'بوكية احمر غلاف ابيض',
+                category: 'romantic',
+                categoryName: 'بوكيهات رومانسية',
+                price: 600,
+                description: 'ورد جوري أحمر بغلاف أبيض ناصع.',
+                image: 'img/romantic/XCTX0822.JPG',
+                badge: 'مميز'
+            },
+            {
+                id: 17,
+                name: 'بوكيه روز معاه شريط',
+                category: 'romantic',
+                categoryName: 'بوكيهات رومانسية',
+                price: 550,
+                description: 'باقة روز رقيقة مزينة بشريط أنيق.',
+                image: 'img/romantic/QFYX4406.JPG',
+                badge: 'مميز'
+            },
+            {
+                id: 18,
+                name: 'بوكيه ليلي',
+                category: 'romantic',
+                categoryName: 'بوكيهات رومانسية',
+                price: 500,
+                description: 'باقة مميزة وجذابة للمناسبات الرقيقة.',
+                image: 'img/romantic/PPTS4695.JPG',
+                badge: 'مميز'
+            },
+            {
+                id: 19,
+                name: 'بوكيه ورد احمر',
+                category: 'romantic',
+                categoryName: 'بوكيهات رومانسية',
+                price: 1100,
+                description: '35 وردة حمراء طبيعية.',
+                image: 'img/romantic/NXXO3486.JPG',
+                badge: 'مميز'
+            },
+            {
+                id: 20,
+                name: 'عباد شمس بوكيه ورد احمر',
+                category: 'romantic',
+                categoryName: 'بوكيهات رومانسية',
+                price: 500,
+                description: '15 وردة مع زهور عباد الشمس المبهجة.',
+                image: 'img/romantic/NGLY9589.JPG',
+                badge: 'مميز'
+            }
+        ];
+
+        let activeCategory = 'all';
+        let searchQuery = '';
+        let cart = [];
+
+        try {
+            cart = JSON.parse(localStorage.getItem('pink_flower_cart')) || [];
+        } catch (e) {
+            cart = [];
+        }
+
+        // عند تحميل الصفحة
+        document.addEventListener('DOMContentLoaded', () => {
+            renderCategories();
+            renderProducts();
+            updateCartUI();
+            setupEventListeners();
+        });
+
+        function setupEventListeners() {
+            const searchInput = document.getElementById('search-input');
+            if (searchInput) {
+                searchInput.addEventListener('input', (e) => {
+                    searchQuery = e.target.value.trim().toLowerCase();
+                    const clearBtn = document.getElementById('clear-search-btn');
+                    if (clearBtn) clearBtn.classList.toggle('hidden', searchQuery === '');
+                    renderProducts();
+                });
+            }
+
+            const clearBtn = document.getElementById('clear-search-btn');
+            if (clearBtn) {
+                clearBtn.addEventListener('click', () => {
+                    const searchInput = document.getElementById('search-input');
+                    if (searchInput) searchInput.value = '';
+                    searchQuery = '';
+                    clearBtn.classList.add('hidden');
+                    renderProducts();
+                    if (searchInput) searchInput.focus();
+                });
+            }
+
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            if (mobileMenuBtn) mobileMenuBtn.addEventListener('click', openSidebar);
+
+            const closeSidebarBtn = document.getElementById('close-sidebar-btn');
+            if (closeSidebarBtn) closeSidebarBtn.addEventListener('click', closeSidebar);
+
+            const sidebarBackdrop = document.getElementById('sidebar-backdrop');
+            if (sidebarBackdrop) sidebarBackdrop.addEventListener('click', closeSidebar);
+
+            const openCartBtn = document.getElementById('open-cart-btn');
+            if (openCartBtn) openCartBtn.addEventListener('click', openCart);
+
+            const closeCartBtn = document.getElementById('close-cart-btn');
+            if (closeCartBtn) closeCartBtn.addEventListener('click', closeCart);
+
+            const cartBackdrop = document.getElementById('cart-backdrop');
+            if (cartBackdrop) cartBackdrop.addEventListener('click', closeCart);
+        }
+
+        function openSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const backdrop = document.getElementById('sidebar-backdrop');
+            if (sidebar) sidebar.classList.remove('translate-x-full');
+            if (backdrop) backdrop.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const backdrop = document.getElementById('sidebar-backdrop');
+            if (sidebar) sidebar.classList.add('translate-x-full');
+            if (backdrop) backdrop.classList.add('hidden');
+            document.body.style.overflow = '';
+        }
+
+        function openCart() {
+            const drawer = document.getElementById('cart-drawer');
+            const backdrop = document.getElementById('cart-backdrop');
+            if (drawer) drawer.classList.remove('-translate-x-full');
+            if (backdrop) backdrop.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeCart() {
+            const drawer = document.getElementById('cart-drawer');
+            const backdrop = document.getElementById('cart-backdrop');
+            if (drawer) drawer.classList.add('-translate-x-full');
+            if (backdrop) backdrop.classList.add('hidden');
+            document.body.style.overflow = '';
+        }
+
+        function selectCategory(catId) {
+            activeCategory = catId;
+            const cat = categories.find(c => c.id === catId);
+            const titleEl = document.getElementById('current-category-title');
+            if (titleEl) titleEl.textContent = cat ? cat.name : 'جميع الورود والباقات';
+            renderCategories();
+            renderProducts();
+            closeSidebar();
+        }
+
+        function resetFilters(e) {
+            if (e) e.preventDefault();
+            activeCategory = 'all';
+            searchQuery = '';
+            const searchInput = document.getElementById('search-input');
+            if (searchInput) searchInput.value = '';
+            const clearBtn = document.getElementById('clear-search-btn');
+            if (clearBtn) clearBtn.classList.add('hidden');
+            const titleEl = document.getElementById('current-category-title');
+            if (titleEl) titleEl.textContent = 'جميع الورود والباقات';
+            renderCategories();
+            renderProducts();
+        }
+
+        function renderCategories() {
+            const list = document.getElementById('category-list');
+            const mobilePills = document.getElementById('mobile-pills');
+
+            if (list) {
+                list.innerHTML = categories.map(cat => {
+                    const count = cat.id === 'all' ? products.length : products.filter(p => p.category === cat.id).length;
+                    const isActive = activeCategory === cat.id;
+                    return `
+                        <button onclick="selectCategory('${cat.id}')" class="w-full flex items-center justify-between px-4 py-3 rounded-2xl text-sm font-bold transition-all ${
+                            isActive 
+                            ? 'bg-gradient-to-l from-pink-500 to-rose-500 text-white shadow-md shadow-pink-500/25' 
+                            : 'bg-white/40 hover:bg-white/80 text-slate-700 hover:text-pink-600 border border-white/60'
+                        }">
+                            <div class="flex items-center gap-3">
+                                <span class="w-8 h-8 rounded-xl flex items-center justify-center ${isActive ? 'bg-white/20 text-white' : 'bg-pink-100/80 text-pink-600'}">
+                                    <i class="fa-solid ${cat.icon}"></i>
+                                </span>
+                                <span>${cat.name}</span>
+                            </div>
+                            <span class="text-xs px-2 py-0.5 rounded-full ${isActive ? 'bg-white/25 text-white' : 'bg-pink-500/10 text-pink-700'}">${count}</span>
+                        </button>
+                    `;
+                }).join('');
+            }
+
+            if (mobilePills) {
+                mobilePills.innerHTML = categories.map(cat => {
+                    const isActive = activeCategory === cat.id;
+                    return `
+                        <button onclick="selectCategory('${cat.id}')" class="shrink-0 px-3.5 py-1.5 rounded-full text-xs font-bold transition ${
+                            isActive 
+                            ? 'bg-pink-500 text-white shadow-sm' 
+                            : 'bg-white/60 text-slate-700 border border-white'
+                        }">
+                            ${cat.name}
+                        </button>
+                    `;
+                }).join('');
+            }
+        }
+
+        function renderProducts() {
+            let filtered = products.filter(p => {
+                const matchCat = activeCategory === 'all' || p.category === activeCategory;
+                const matchSearch = p.name.toLowerCase().includes(searchQuery) || p.description.toLowerCase().includes(searchQuery);
+                return matchCat && matchSearch;
+            });
+
+            const countEl = document.getElementById('products-count');
+            if (countEl) countEl.textContent = `${filtered.length} منتج`;
+
+            const grid = document.getElementById('products-grid');
+            const emptyState = document.getElementById('empty-state');
+
+            if (!grid || !emptyState) return;
+
+            if (filtered.length === 0) {
+                grid.classList.add('hidden');
+                emptyState.classList.remove('hidden');
+                return;
+            }
+
+            grid.classList.remove('hidden');
+            emptyState.classList.add('hidden');
+
+            grid.innerHTML = filtered.map(p => `
+                <div class="glass-card rounded-3xl overflow-hidden flex flex-col justify-between">
+                    <div>
+                        <div class="relative h-56 sm:h-60 bg-pink-100/50 overflow-hidden group">
+                            <img 
+                                src="${p.image}" 
+                                alt="${p.name}" 
+                                onerror="this.onerror=null; this.src='https://placehold.co/600x500/fce7f3/db2777?text=Pink+Flower';"
+                                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                            >
+                            <span class="absolute top-3 right-3 px-3 py-1 rounded-full text-xs font-extrabold bg-white/85 backdrop-blur-md text-pink-700 shadow-xs border border-white">
+                                ${p.categoryName}
+                            </span>
+                            ${p.badge ? `<span class="absolute top-3 left-3 px-3 py-1 rounded-full text-xs font-extrabold bg-pink-500 text-white shadow-xs">${p.badge}</span>` : ''}
+                        </div>
+                        <div class="p-5 pb-2">
+                            <h3 class="font-bold text-lg text-slate-800 mb-1">${p.name}</h3>
+                            <p class="text-xs sm:text-sm text-slate-600 line-clamp-2 leading-relaxed">${p.description}</p>
+                        </div>
+                    </div>
+                    <div class="p-5 pt-3 flex items-center justify-between border-t border-white/60 mt-2">
+                        <div>
+                            <span class="text-[11px] text-slate-500 block">السعر</span>
+                            <span class="text-lg sm:text-xl font-extrabold text-pink-600">${p.price} <small class="text-xs font-bold">ج.م</small></span>
+                        </div>
+                        <button onclick="addToCart(${p.id})" class="flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-gradient-to-l from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white font-bold text-xs sm:text-sm shadow-md shadow-pink-500/20 transition active:scale-95">
+                            <i class="fa-solid fa-cart-plus text-base"></i>
+                            <span>أضف للسلة</span>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function addToCart(id) {
+            const product = products.find(p => p.id === id);
+            if (!product) return;
+            const existing = cart.find(item => item.id === id);
+            if (existing) {
+                existing.quantity += 1;
+            } else {
+                cart.push({ ...product, quantity: 1 });
+            }
+            saveCart();
+            updateCartUI();
+            showToast(`تمت إضافة "${product.name}" إلى السلة 🌸`);
+        }
+
+        function updateQuantity(id, delta) {
+            const item = cart.find(i => i.id === id);
+            if (!item) return;
+            item.quantity += delta;
+            if (item.quantity <= 0) {
+                cart = cart.filter(i => i.id !== id);
+            }
+            saveCart();
+            updateCartUI();
+        }
+
+        function removeFromCart(id) {
+            cart = cart.filter(i => i.id !== id);
+            saveCart();
+            updateCartUI();
+        }
+
+        function saveCart() {
+            try {
+                localStorage.setItem('pink_flower_cart', JSON.stringify(cart));
+            } catch(e) {}
+        }
+
+        function updateCartUI() {
+            const totalCount = cart.reduce((sum, i) => sum + i.quantity, 0);
+            const totalPrice = cart.reduce((sum, i) => sum + (i.price * i.quantity), 0);
+
+            const badgeEl = document.getElementById('cart-badge');
+            const totalCountEl = document.getElementById('cart-total-count');
+            const totalPriceEl = document.getElementById('cart-total-price');
+
+            if (badgeEl) badgeEl.textContent = totalCount;
+            if (totalCountEl) totalCountEl.textContent = `${totalCount} باقة`;
+            if (totalPriceEl) totalPriceEl.textContent = `${totalPrice} ج.م`;
+
+            const container = document.getElementById('cart-items-container');
+            if (!container) return;
+
+            if (cart.length === 0) {
+                container.innerHTML = `
+                    <div class="h-full flex flex-col items-center justify-center text-center py-12 px-4">
+                        <div class="w-16 h-16 rounded-full bg-pink-100 text-pink-400 flex items-center justify-center text-3xl mb-3">
+                            <i class="fa-solid fa-bag-shopping"></i>
+                        </div>
+                        <h3 class="font-bold text-slate-700 text-base">سلتك فارغة حالياً</h3>
+                        <p class="text-xs text-slate-500 mt-1">اختر باقاتك المفضلة وأضفها للسلة.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = cart.map(item => `
+                <div class="flex items-center gap-3 p-3 rounded-2xl bg-white/75 border border-white shadow-xs">
+                    <img src="${item.image}" alt="${item.name}" onerror="this.onerror=null; this.src='https://placehold.co/150x150/fce7f3/db2777?text=Rose';" class="w-16 h-16 rounded-xl object-cover shrink-0">
+                    <div class="flex-1 min-w-0">
+                        <h4 class="font-bold text-sm text-slate-800 truncate">${item.name}</h4>
+                        <span class="text-xs font-extrabold text-pink-600">${item.price * item.quantity} ج.م</span>
+                        <div class="flex items-center gap-2 mt-1.5">
+                            <button onclick="updateQuantity(${item.id}, -1)" class="w-6 h-6 rounded-lg bg-pink-100 text-pink-700 font-bold flex items-center justify-center hover:bg-pink-200 transition"><i class="fa-solid fa-minus text-xs"></i></button>
+                            <span class="text-xs font-extrabold text-slate-700">${item.quantity}</span>
+                            <button onclick="updateQuantity(${item.id}, 1)" class="w-6 h-6 rounded-lg bg-pink-100 text-pink-700 font-bold flex items-center justify-center hover:bg-pink-200 transition"><i class="fa-solid fa-plus text-xs"></i></button>
+                        </div>
+                    </div>
+                    <button onclick="removeFromCart(${item.id})" class="p-2 text-slate-400 hover:text-rose-600 transition"><i class="fa-solid fa-trash-can"></i></button>
+                </div>
+            `).join('');
+        }
+
+        function toggleDeliveryAddress() {
+            const methodInput = document.querySelector('input[name="delivery-method"]:checked');
+            const addressWrapper = document.getElementById('delivery-address-wrapper');
+            if (methodInput && addressWrapper) {
+                addressWrapper.classList.toggle('hidden', methodInput.value === 'branch');
+            }
+        }
+
+        // إرسال الطلب عبر واتساب مع زر المزيد أسفل المنتجات
+        function orderViaWhatsApp() {
+            if (cart.length === 0) {
+                showToast('يرجى إضافة باقة واحدة على الأقل للسلة أولاً 🌸', 'warning');
+                return;
+            }
+
+            const methodInput = document.querySelector('input[name="delivery-method"]:checked');
+            const method = methodInput ? methodInput.value : 'delivery';
+            const phoneEl = document.getElementById('customer-phone');
+            const addressEl = document.getElementById('delivery-address');
+            const noteEl = document.getElementById('gift-note');
+
+            const phone = phoneEl ? phoneEl.value.trim() : '';
+            const address = addressEl ? addressEl.value.trim() : '';
+            const note = noteEl ? noteEl.value.trim() : '';
+            const totalPrice = cart.reduce((sum, i) => sum + (i.price * i.quantity), 0);
+
+            if (method === 'delivery') {
+                if (!phone) {
+                    showToast('يرجى إدخال رقم الهاتف للتواصل 📱', 'warning');
+                    if (phoneEl) phoneEl.focus();
+                    return;
+                }
+                if (!address) {
+                    showToast('يرجى إدخال العنوان بالتفصيل 📍', 'warning');
+                    if (addressEl) addressEl.focus();
+                    return;
+                }
+            }
+
+            let text = `مرحباً Pink Flower 🌸\nأرغب في طلب الباقات التالية:\n\n`;
+            cart.forEach((i, idx) => {
+                text += `${idx + 1}. *${i.name}*\n   • الكمية: ${i.quantity}\n   • السعر: ${i.price * i.quantity} ج.م\n`;
+            });
+            text += `\n────────────────────\n`;
+            text += `💰 *الإجمالي الكلي:* ${totalPrice} ج.م\n`;
+
+            if (method === 'delivery') {
+                text += `🚚 *طريقة الاستلام:* توصيل ديليفري (القاهرة والجيزة)\n`;
+                text += `📱 *رقم الهاتف:* ${phone}\n`;
+                text += `📍 *العنوان:* ${address}\n`;
+            } else {
+                text += `🏪 *طريقة الاستلام:* استلام وزيارة الفرع مباشرة\n`;
+            }
+
+            if (note) text += `💌 *رسالة الإهداء:* "${note}"\n`;
+            text += `\nفي انتظار تأكيد الطلب. شكراً لكم! 🌷`;
+
+            const url = `https://wa.me/${STORE_WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`;
+            window.open(url, '_blank', 'noopener,noreferrer');
+        }
+
+        function showToast(text, type = 'success') {
+            const container = document.getElementById('toast-container');
+            if (!container) return;
+            const toast = document.createElement('div');
+            
+            const bgClass = type === 'warning' 
+                ? 'bg-rose-600/95 text-white' 
+                : 'bg-slate-900/90 text-white border border-pink-400/40';
+
+            toast.className = `${bgClass} backdrop-blur-md px-4 py-3 rounded-2xl shadow-xl text-xs sm:text-sm font-bold flex items-center gap-2.5 transform translate-y-4 opacity-0 transition-all duration-300`;
+            toast.innerHTML = `
+                <i class="fa-solid ${type === 'warning' ? 'fa-circle-exclamation text-amber-300' : 'fa-circle-check text-pink-400'} text-base"></i>
+                <span>${text}</span>
+            `;
+
+            container.appendChild(toast);
+
+            requestAnimationFrame(() => {
+                toast.classList.remove('translate-y-4', 'opacity-0');
+            });
+
+            setTimeout(() => {
+                toast.classList.add('translate-y-4', 'opacity-0');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
