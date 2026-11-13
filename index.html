@@ -45,17 +45,24 @@
             overflow-x: hidden;
         }
 
-        /* دوائر ضبابية في الخلفية لإبراز تأثير الشفافية الزجاجية */
+        /* حركة طفو مستمرة لعناصر الخلفية */
+        @keyframes floatBlob {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(25px, -30px) scale(1.06); }
+            66% { transform: translate(-20px, 20px) scale(0.95); }
+        }
+
         .bg-blob-1 {
             position: fixed;
             top: -10%;
             right: -5%;
             width: 450px;
             height: 450px;
-            background: radial-gradient(circle, rgba(244, 114, 182, 0.35) 0%, rgba(255, 255, 255, 0) 70%);
+            background: radial-gradient(circle, rgba(244, 114, 182, 0.38) 0%, rgba(255, 255, 255, 0) 70%);
             border-radius: 50%;
             z-index: -1;
             pointer-events: none;
+            animation: floatBlob 14s ease-in-out infinite;
         }
 
         .bg-blob-2 {
@@ -64,10 +71,11 @@
             left: -10%;
             width: 550px;
             height: 550px;
-            background: radial-gradient(circle, rgba(251, 113, 133, 0.3) 0%, rgba(255, 255, 255, 0) 70%);
+            background: radial-gradient(circle, rgba(251, 113, 133, 0.32) 0%, rgba(255, 255, 255, 0) 70%);
             border-radius: 50%;
             z-index: -1;
             pointer-events: none;
+            animation: floatBlob 18s ease-in-out infinite reverse;
         }
 
         .bg-blob-3 {
@@ -76,39 +84,41 @@
             left: 30%;
             width: 350px;
             height: 350px;
-            background: radial-gradient(circle, rgba(232, 121, 249, 0.18) 0%, rgba(255, 255, 255, 0) 70%);
+            background: radial-gradient(circle, rgba(232, 121, 249, 0.2) 0%, rgba(255, 255, 255, 0) 70%);
             border-radius: 50%;
             z-index: -1;
             pointer-events: none;
+            animation: floatBlob 16s ease-in-out infinite 2s;
         }
 
         /* التأثير الزجاجي الأساسي */
         .glass-panel {
-            background: rgba(255, 255, 255, 0.48);
+            background: rgba(255, 255, 255, 0.5);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.75);
+            border: 1px solid rgba(255, 255, 255, 0.78);
             box-shadow: 0 8px 32px 0 rgba(219, 39, 119, 0.08);
+            transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.35s ease;
         }
 
         .glass-card {
-            background: rgba(255, 255, 255, 0.55);
+            background: rgba(255, 255, 255, 0.6);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.88);
             box-shadow: 0 10px 25px -5px rgba(236, 72, 153, 0.08);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.38s cubic-bezier(0.22, 1, 0.36, 1);
         }
 
         .glass-card:hover {
-            background: rgba(255, 255, 255, 0.75);
-            transform: translateY(-5px);
-            box-shadow: 0 20px 30px -10px rgba(236, 72, 153, 0.18);
-            border-color: rgba(244, 114, 182, 0.6);
+            background: rgba(255, 255, 255, 0.85);
+            transform: translateY(-7px) scale(1.01);
+            box-shadow: 0 22px 35px -10px rgba(236, 72, 153, 0.22);
+            border-color: rgba(244, 114, 182, 0.75);
         }
 
         .glass-input {
-            background: rgba(255, 255, 255, 0.65);
+            background: rgba(255, 255, 255, 0.68);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
             border: 1px solid rgba(244, 114, 182, 0.35);
@@ -116,17 +126,70 @@
         }
 
         .glass-input:focus {
-            background: rgba(255, 255, 255, 0.92);
+            background: rgba(255, 255, 255, 0.95);
             border-color: #ec4899;
             box-shadow: 0 0 0 4px rgba(236, 72, 153, 0.15);
             outline: none;
         }
 
         .glass-drawer {
-            background: rgba(255, 250, 252, 0.88);
+            background: rgba(255, 250, 252, 0.9);
             backdrop-filter: blur(22px);
             -webkit-backdrop-filter: blur(22px);
             border-right: 1px solid rgba(255, 255, 255, 0.9);
+        }
+
+        /* تأثير لمعان للأزرار */
+        .btn-shine {
+            position: relative;
+            overflow: hidden;
+        }
+        .btn-shine::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 60%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.35), transparent);
+            transform: skewX(-25deg);
+            transition: 0.6s;
+        }
+        .btn-shine:hover::after {
+            left: 140%;
+        }
+
+        /* حركات الدخول والنبض */
+        @keyframes cardPopIn {
+            from {
+                opacity: 0;
+                transform: translateY(22px) scale(0.96);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+        .animate-card {
+            opacity: 0;
+            animation: cardPopIn 0.48s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+
+        @keyframes gentleBounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-4px); }
+        }
+        .animate-float-icon {
+            animation: gentleBounce 3s ease-in-out infinite;
+        }
+
+        @keyframes badgePop {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.38); }
+            100% { transform: scale(1); }
+        }
+        .badge-pop {
+            animation: badgePop 0.35s ease;
         }
 
         /* شريط تمرير ناعم */
@@ -144,26 +207,11 @@
         ::-webkit-scrollbar-thumb:hover {
             background: rgba(236, 72, 153, 0.6);
         }
-
-        /* حركة ظهور البطاقات */
-        @keyframes fadeUp {
-            from {
-                opacity: 0;
-                transform: translateY(15px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        .animate-fade-up {
-            animation: fadeUp 0.4s ease forwards;
-        }
     </style>
 </head>
 <body class="text-slate-800 antialiased selection:bg-pink-200 selection:text-pink-900">
 
-    <!-- عناصر الخلفية الضبابية لإظهار الشفافية -->
+    <!-- عناصر الخلفية الضبابية المتحركة -->
     <div class="bg-blob-1"></div>
     <div class="bg-blob-2"></div>
     <div class="bg-blob-3"></div>
@@ -171,7 +219,34 @@
     <!-- رسالة تنبيه منبثقة (Toast Notification) -->
     <div id="toast-container" class="fixed bottom-5 left-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
 
-    <!-- الشريط العلوي الثابت (Header) يضم اللوجو + شريط البحث + زر السلة -->
+    <!-- نافذة معاينة سريعة عند فتح رابط منتج مباشر -->
+    <div id="product-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-pink-950/40 backdrop-blur-sm">
+        <div class="glass-panel bg-white/90 rounded-3xl max-w-md w-full overflow-hidden shadow-2xl border border-white animate-card">
+            <div class="relative h-64 bg-pink-100">
+                <img id="modal-img" src="" alt="" class="w-full h-full object-cover">
+                <button onclick="closeProductModal()" class="absolute top-3 left-3 w-9 h-9 rounded-full bg-white/90 text-slate-700 hover:text-pink-600 flex items-center justify-center shadow-md transition">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+                <span id="modal-cat" class="absolute top-3 right-3 px-3 py-1 rounded-full text-xs font-extrabold bg-white/90 text-pink-700 shadow-xs"></span>
+            </div>
+            <div class="p-6">
+                <h3 id="modal-title" class="text-xl font-extrabold text-slate-800 mb-2"></h3>
+                <p id="modal-desc" class="text-sm text-slate-600 leading-relaxed mb-4"></p>
+                <div class="flex items-center justify-between pt-3 border-t border-pink-100">
+                    <div>
+                        <span class="text-xs text-slate-500 block">السعر</span>
+                        <span id="modal-price" class="text-2xl font-extrabold text-pink-600"></span>
+                    </div>
+                    <button id="modal-add-btn" class="btn-shine flex items-center gap-2 px-5 py-3 rounded-2xl bg-gradient-to-l from-pink-500 to-rose-500 text-white font-bold text-sm shadow-lg shadow-pink-500/25 transition active:scale-95">
+                        <i class="fa-solid fa-cart-plus"></i>
+                        <span>أضف للسلة</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- الشريط العلوي الثابت (Header) -->
     <header class="sticky top-0 z-40 glass-panel border-b border-white/70 px-4 sm:px-6 lg:px-8 py-3">
         <div class="max-w-[1600px] mx-auto flex flex-wrap items-center justify-between gap-3">
             
@@ -183,7 +258,7 @@
 
                 <!-- الشعار (Logo) -->
                 <a href="#" onclick="resetFilters(event)" class="flex items-center gap-2.5 group">
-                    <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-pink-500 to-rose-400 flex items-center justify-center text-white shadow-md shadow-pink-500/25 group-hover:rotate-6 transition-transform">
+                    <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-pink-500 to-rose-400 flex items-center justify-center text-white shadow-md shadow-pink-500/25 group-hover:rotate-12 group-hover:scale-105 transition-all duration-300">
                         <svg class="w-6 h-6 fill-current" viewBox="0 0 24 24">
                             <path d="M12,2C13.8,2 15.2,3.4 15.2,5.2C15.2,5.6 15.1,6 15,6.4C15.4,6.3 15.8,6.2 16.2,6.2C18,6.2 19.4,7.6 19.4,9.4C19.4,10.8 18.5,12 17.3,12.4C18.5,12.8 19.4,14 19.4,15.4C19.4,17.2 18,18.6 16.2,18.6C15.8,18.6 15.4,18.5 15,18.4C15.1,18.8 15.2,19.2 15.2,19.6C15.2,21.4 13.8,22.8 12,22.8C10.2,22.8 8.8,21.4 8.8,19.6C8.8,19.2 8.9,18.8 9,18.4C8.6,18.5 8.2,18.6 7.8,18.6C6,18.6 4.6,17.2 4.6,15.4C4.6,14 5.5,12.8 6.7,12.4C5.5,12 4.6,10.8 4.6,9.4C4.6,7.6 6,6.2 7.8,6.2C8.2,6.2 8.6,6.3 9,6.4C8.9,6 8.8,5.6 8.8,5.2C8.8,3.4 10.2,2 12,2M12,9.5A2.9,2.9 0 0,0 9.1,12.4A2.9,2.9 0 0,0 12,15.3A2.9,2.9 0 0,0 14.9,12.4A2.9,2.9 0 0,0 12,9.5Z"/>
                         </svg>
@@ -197,7 +272,7 @@
                 </a>
             </div>
 
-            <!-- المنتصف: شريط البحث المدمج مع شعار مصغر بداخله -->
+            <!-- المنتصف: شريط البحث -->
             <div class="order-3 md:order-2 w-full md:w-auto md:flex-1 md:max-w-xl lg:max-w-2xl">
                 <div class="relative flex items-center w-full">
                     <div class="absolute right-3 flex items-center gap-1.5 pointer-events-none text-pink-500 border-l border-pink-200/80 pl-2.5">
@@ -224,7 +299,7 @@
 
             <!-- القسم الأيسر: زر سلة المشتريات -->
             <div class="order-2 md:order-3 flex items-center gap-2">
-                <button id="open-cart-btn" class="relative flex items-center gap-2.5 px-4 py-2.5 rounded-2xl bg-gradient-to-l from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white font-semibold shadow-lg shadow-pink-500/25 transition active:scale-95">
+                <button id="open-cart-btn" class="btn-shine relative flex items-center gap-2.5 px-4 py-2.5 rounded-2xl bg-gradient-to-l from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white font-semibold shadow-lg shadow-pink-500/25 transition active:scale-95">
                     <i class="fa-solid fa-bag-shopping text-lg"></i>
                     <span class="hidden sm:inline text-sm">سلة الورود</span>
                     <span id="cart-badge" class="inline-flex items-center justify-center min-w-[22px] h-[22px] px-1.5 text-xs font-bold bg-white text-pink-600 rounded-full shadow-sm">
@@ -236,17 +311,16 @@
         </div>
     </header>
 
-    <!-- الحاوية الرئيسية (السايد بار + محتوى المنتجات) -->
+    <!-- الحاوية الرئيسية -->
     <div class="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col lg:flex-row gap-6 relative">
 
         <!-- خلفية معتمة عند فتح السايد بار في الموبايل -->
         <div id="sidebar-backdrop" class="fixed inset-0 bg-pink-950/25 backdrop-blur-xs z-40 hidden lg:hidden transition-opacity"></div>
 
-        <!-- القائمة الجانبية (Sidebar) للأقسام الخمسة -->
+        <!-- القائمة الجانبية (Sidebar) -->
         <aside id="sidebar" class="fixed lg:sticky top-0 lg:top-[84px] right-0 z-50 lg:z-30 h-full lg:h-[calc(100vh-108px)] w-72 sm:w-80 lg:w-72 shrink-0 glass-panel lg:rounded-3xl p-5 flex flex-col justify-between transform translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out overflow-y-auto">
             
             <div>
-                <!-- رأس السايد بار في الموبايل -->
                 <div class="flex items-center justify-between lg:hidden pb-4 mb-4 border-b border-pink-200/60">
                     <div class="flex items-center gap-2">
                         <span class="w-8 h-8 rounded-xl bg-pink-500 text-white flex items-center justify-center">
@@ -264,21 +338,18 @@
                     <p class="text-sm font-bold text-slate-700">تشكيلة بينك فلاور المختارة</p>
                 </div>
 
-                <!-- قائمة الأقسام (الكل + 5 أقسام رئيسية) -->
-                <nav id="category-list" class="space-y-2">
-                    <!-- يتم توليد الأزرار ديناميكياً عبر JS -->
-                </nav>
+                <nav id="category-list" class="space-y-2"></nav>
             </div>
 
-            <!-- بطاقة تنفيذ حسب الصورة وتواصل سريع أسفل السايد بار -->
+            <!-- بطاقة تنفيذ حسب الصورة وتواصل سريع -->
             <div class="mt-6 p-4 rounded-2xl bg-gradient-to-br from-pink-500/15 to-rose-500/15 border border-white/80 text-center">
-                <div class="w-10 h-10 mx-auto mb-2 rounded-full bg-white/85 text-pink-600 flex items-center justify-center shadow-sm">
+                <div class="w-10 h-10 mx-auto mb-2 rounded-full bg-white/85 text-pink-600 flex items-center justify-center shadow-sm animate-float-icon">
                     <i class="fa-solid fa-camera-retro text-lg"></i>
                 </div>
                 <h3 class="text-sm font-extrabold text-slate-800">ابعتلنا صورتك وإحنا هننفذهالك!</h3>
                 <p class="text-xs text-slate-600 mt-1 mb-3 leading-relaxed">عندك صورة بوكيه عاجبك؟ ابعتهالنا على واتساب وهننفذهالك بنفس الشكل والتفاصيل</p>
                 <div class="space-y-2">
-                    <a href="https://wa.me/201031656288?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D9%8B%20Pink%20Flower%20%F0%9F%8C%B8%D8%8C%20%D8%B9%D9%86%D8%AF%D9%8A%20%D8%B5%D9%88%D8%B1%D8%A9%20%D8%A8%D9%88%D9%83%D9%8A%D9%87%20%D9%88%D8%AD%D8%A7%D8%A8%D8%A8%20%D8%AA%D9%86%D9%81%D8%B0%D9%88%D9%87%D8%A7%D9%84%D9%8A%20%D8%A8%D9%86%D9%81%D8%B3%20%D8%A7%D9%84%D8%B4%D9%83%D9%84" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-1.5 w-full py-2 px-3 rounded-xl bg-green-500 hover:bg-green-600 text-white text-xs font-bold shadow-sm transition">
+                    <a href="https://wa.me/201031656288?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D9%8B%20Pink%20Flower%20%F0%9F%8C%B8%D8%8C%20%D8%B9%D9%86%D8%AF%D9%8A%20%D8%B5%D9%88%D8%B1%D8%A9%20%D8%A8%D9%88%D9%83%D9%8A%D9%87%20%D9%88%D8%AD%D8%A7%D8%A8%D8%A8%20%D8%AA%D9%86%D9%81%D8%B0%D9%88%D9%87%D8%A7%D9%84%D9%8A%20%D8%A8%D9%86%D9%81%D8%B3%20%D8%A7%D9%84%D8%B4%D9%83%D9%84" target="_blank" rel="noopener noreferrer" class="btn-shine inline-flex items-center justify-center gap-1.5 w-full py-2 px-3 rounded-xl bg-green-500 hover:bg-green-600 text-white text-xs font-bold shadow-sm transition">
                         <i class="fa-brands fa-whatsapp text-sm"></i>
                         <span>ابعت صورتك على واتساب</span>
                     </a>
@@ -293,8 +364,8 @@
         <!-- المحتوى الرئيسي -->
         <main class="flex-1 min-w-0">
             
-            <!-- شريط إعلاني بارز للتوصيل داخل القاهرة والجيزة وزيارة الفرع -->
-            <div class="glass-panel rounded-2xl px-4 py-3 mb-4 border border-pink-300/60 bg-gradient-to-l from-pink-500/10 via-white/60 to-rose-500/10 flex flex-wrap items-center justify-between gap-2 text-xs sm:text-sm">
+            <!-- شريط إعلاني بارز -->
+            <div class="glass-panel rounded-2xl px-4 py-3 mb-4 border border-pink-300/60 bg-gradient-to-l from-pink-500/10 via-white/60 to-rose-500/10 flex flex-wrap items-center justify-between gap-2 text-xs sm:text-sm animate-card">
                 <div class="flex flex-wrap items-center gap-3 sm:gap-5">
                     <span class="inline-flex items-center gap-1.5 font-bold text-pink-700">
                         <i class="fa-solid fa-truck-fast text-pink-500"></i>
@@ -311,8 +382,8 @@
                 </a>
             </div>
 
-            <!-- بانر ترحيبي زجاجي أنيق -->
-            <section class="glass-panel rounded-3xl p-6 sm:p-8 mb-6 relative overflow-hidden">
+            <!-- بانر ترحيبي -->
+            <section class="glass-panel rounded-3xl p-6 sm:p-8 mb-6 relative overflow-hidden animate-card" style="animation-delay: 0.08s;">
                 <div class="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
                     <div>
                         <div class="flex flex-wrap items-center gap-2 mb-3">
@@ -327,7 +398,7 @@
                             عبّر عن مشاعرك بأرقى <span class="text-pink-600">باقات الورود</span>
                         </h1>
                         <p class="text-slate-600 text-sm sm:text-base mt-2 max-w-2xl">
-                            اختر باقتك المفضلة من بين 5 أقسام متنوعة، أضفها لسلتك، وحدد التوصيل لباب بيتك في القاهرة والجيزة أو شرفنا بزيارتك في الفرع عبر واتساب بضغطة زر.
+                            اختر باقتك المفضلة، أضفها لسلتك، وحدد التوصيل لباب بيتك في القاهرة والجيزة أو شرفنا بزيارتك في الفرع عبر واتساب بضغطة زر.
                         </p>
                     </div>
                     <div class="flex items-center gap-3 self-end md:self-center">
@@ -337,14 +408,14 @@
                         </div>
                     </div>
                 </div>
-                <i class="fa-solid fa-spa absolute -left-6 -bottom-6 text-9xl text-pink-400/10 pointer-events-none"></i>
+                <i class="fa-solid fa-spa absolute -left-6 -bottom-6 text-9xl text-pink-400/10 pointer-events-none animate-float-icon"></i>
             </section>
 
-            <!-- بطاقة تنفيذ الباقات حسب الصورة: ابعتلنا صورتك وإحنا هننفذهالك -->
-            <section class="glass-panel rounded-3xl p-5 sm:p-6 mb-6 border border-pink-300/70 bg-gradient-to-l from-pink-500/10 via-white/65 to-rose-500/15 relative overflow-hidden">
+            <!-- بطاقة تنفيذ الباقات حسب الصورة -->
+            <section class="glass-panel rounded-3xl p-5 sm:p-6 mb-6 border border-pink-300/70 bg-gradient-to-l from-pink-500/10 via-white/65 to-rose-500/15 relative overflow-hidden animate-card" style="animation-delay: 0.14s;">
                 <div class="relative z-10 flex flex-col sm:flex-row items-center justify-between gap-4">
                     <div class="flex items-center gap-4 text-center sm:text-right flex-col sm:flex-row">
-                        <div class="w-14 h-14 shrink-0 rounded-2xl bg-gradient-to-tr from-pink-500 to-rose-500 text-white flex items-center justify-center text-2xl shadow-lg shadow-pink-500/25">
+                        <div class="w-14 h-14 shrink-0 rounded-2xl bg-gradient-to-tr from-pink-500 to-rose-500 text-white flex items-center justify-center text-2xl shadow-lg shadow-pink-500/25 animate-float-icon">
                             <i class="fa-solid fa-camera-retro"></i>
                         </div>
                         <div>
@@ -359,20 +430,47 @@
                             </p>
                         </div>
                     </div>
-                    <a href="https://wa.me/201031656288?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D9%8B%20Pink%20Flower%20%F0%9F%8C%B8%D8%8C%20%D8%B9%D9%86%D8%AF%D9%8A%20%D8%B5%D9%88%D8%B1%D8%A9%20%D8%A8%D9%88%D9%83%D9%8A%D9%87%20%D9%88%D8%AD%D8%A7%D8%A8%D8%A8%20%D8%AA%D9%86%D9%81%D8%B0%D9%88%D9%87%D8%A7%D9%84%D9%8A%20%D8%A8%D9%86%D9%81%D8%B3%20%D8%A7%D9%84%D8%B4%D9%83%D9%84" target="_blank" rel="noopener noreferrer" class="shrink-0 w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3 rounded-2xl bg-gradient-to-l from-[#25D366] to-[#128C7E] hover:from-[#20bd5a] hover:to-[#0e7266] text-white font-bold text-xs sm:text-sm shadow-lg shadow-green-500/25 transition transform active:scale-95">
+                    <a href="https://wa.me/201031656288?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D9%8B%20Pink%20Flower%20%F0%9F%8C%B8%D8%8C%20%D8%B9%D9%86%D8%AF%D9%8A%20%D8%B5%D9%88%D8%B1%D8%A9%20%D8%A8%D9%88%D9%83%D9%8A%D9%87%20%D9%88%D8%AD%D8%A7%D8%A8%D8%A8%20%D8%AA%D9%86%D9%81%D8%B0%D9%88%D9%87%D8%A7%D9%84%D9%8A%20%D8%A8%D9%86%D9%81%D8%B3%20%D8%A7%D9%84%D8%B4%D9%83%D9%84" target="_blank" rel="noopener noreferrer" class="btn-shine shrink-0 w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3 rounded-2xl bg-gradient-to-l from-[#25D366] to-[#128C7E] hover:from-[#20bd5a] hover:to-[#0e7266] text-white font-bold text-xs sm:text-sm shadow-lg shadow-green-500/25 transition transform active:scale-95">
                         <i class="fa-brands fa-whatsapp text-lg"></i>
                         <span>ابعت الصورة الآن عبر واتساب</span>
                     </a>
                 </div>
             </section>
 
-            <!-- شريط معلومات الفلترة الحالي -->
-            <div class="flex flex-wrap items-center justify-between gap-3 mb-5 px-1">
-                <div class="flex items-center gap-2">
-                    <h2 id="current-category-title" class="text-lg sm:text-xl font-bold text-slate-800">جميع الورود والباقات</h2>
-                    <span id="products-count" class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-white/70 text-pink-600 border border-pink-200/70">
-                        0 منتج
-                    </span>
+            <!-- شريط أدوات الفلترة + الترتيب (Sort By) + تغيير شكل العرض على الموبايل -->
+            <div class="glass-panel rounded-2xl p-3.5 mb-5 flex flex-col gap-3">
+                <div class="flex flex-wrap items-center justify-between gap-3">
+                    <!-- عنوان القسم والعدد -->
+                    <div class="flex items-center gap-2">
+                        <h2 id="current-category-title" class="text-base sm:text-xl font-bold text-slate-800">جميع الورود والباقات</h2>
+                        <span id="products-count" class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-white/80 text-pink-600 border border-pink-200/70">
+                            0 منتج
+                        </span>
+                    </div>
+
+                    <!-- أدوات التحكم: Sort By + أزرار شكل العرض للموبايل -->
+                    <div class="flex items-center gap-2 mr-auto sm:mr-0">
+                        <!-- قائمة الترتيب (Sort By) -->
+                        <div class="relative flex items-center">
+                            <i class="fa-solid fa-arrow-down-wide-short text-pink-500 text-xs absolute right-3 pointer-events-none"></i>
+                            <select id="sort-select" onchange="handleSortChange(this.value)" aria-label="ترتيب المنتجات" class="glass-input rounded-xl py-2 pr-8 pl-3 text-xs sm:text-sm font-bold text-slate-700 cursor-pointer">
+                                <option value="default">الترتيب: الافتراضي</option>
+                                <option value="price-asc">السعر: من الأقل للأعلى</option>
+                                <option value="price-desc">السعر: من الأعلى للأقل</option>
+                                <option value="name-asc">الاسم: أ - ي</option>
+                            </select>
+                        </div>
+
+                        <!-- أزرار تغيير طريقة العرض على الموبايل (فوق بعض 1 عمود / جنب بعض 2 عمود) -->
+                        <div class="flex sm:hidden items-center bg-white/70 p-1 rounded-xl border border-pink-200/70 shadow-2xs" title="تغيير طريقة العرض">
+                            <button id="layout-1col-btn" onclick="setMobileLayout(1)" aria-label="عرض فوق بعض" class="w-8 h-8 rounded-lg flex items-center justify-center text-xs transition bg-pink-500 text-white shadow-xs">
+                                <i class="fa-solid fa-square"></i>
+                            </button>
+                            <button id="layout-2col-btn" onclick="setMobileLayout(2)" aria-label="عرض جنب بعض" class="w-8 h-8 rounded-lg flex items-center justify-center text-xs transition text-slate-600 hover:text-pink-600">
+                                <i class="fa-solid fa-table-cells-large"></i>
+                            </button>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- أزرار اختصار سريعة للأقسام على الشاشات الصغيرة -->
@@ -380,12 +478,12 @@
             </div>
 
             <!-- شبكة عرض المنتجات -->
-            <div id="products-grid" class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-5"></div>
+            <div id="products-grid" class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4 sm:gap-5"></div>
 
             <!-- زر المزيد عبر واتساب أسفل المنتجات -->
             <div class="mt-8 glass-panel rounded-3xl p-6 text-center border border-pink-300/60 bg-gradient-to-l from-pink-500/10 via-white/70 to-rose-500/10">
                 <div class="max-w-xl mx-auto">
-                    <div class="w-12 h-12 mx-auto mb-3 rounded-2xl bg-green-500 text-white flex items-center justify-center text-xl shadow-md shadow-green-500/25">
+                    <div class="w-12 h-12 mx-auto mb-3 rounded-2xl bg-green-500 text-white flex items-center justify-center text-xl shadow-md shadow-green-500/25 animate-float-icon">
                         <i class="fa-brands fa-whatsapp"></i>
                     </div>
                     <h3 class="text-base sm:text-lg font-extrabold text-slate-800 mb-1">
@@ -394,21 +492,15 @@
                     <p class="text-xs sm:text-sm text-slate-600 mb-4 leading-relaxed">
                         لدينا تشكيلة واسعة جداً من التصاميم الخاصة. راسلنا عبر واتساب وسنرسل لك المزيد من الصور والخيارات المناسبة لمناسبتك.
                     </p>
-                    <a href="https://wa.me/201031656288?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D9%8B%20Pink%20Flower%20%F0%9F%8C%B8%D8%8C%20%D8%A3%D8%B1%D9%8A%D8%AF%20%D8%B1%D8%A4%D9%8A%D8%A9%20المزيد%20%D9%85%D9%86%20%D8%A7%D9%84%D8%A8%D8%A7%D9%82%D8%A7%D8%AA%20%D9%88%D8%A7%D9%84%D8%AA%D8%B3%D8%A7%D9%85%D9%8A%D9%85%20%D8%A7%D9%84%D8%A5%D8%B6%D8%A7%D9%81%D9%8A%D8%A9" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-2.5 px-6 py-3 rounded-2xl bg-gradient-to-l from-[#25D366] to-[#128C7E] hover:from-[#20bd5a] hover:to-[#0e7266] text-white font-bold text-xs sm:text-sm shadow-lg shadow-green-500/25 transition transform active:scale-95">
+                    <a href="https://wa.me/201031656288?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D9%8B%20Pink%20Flower%20%F0%9F%8C%B8%D8%8C%20%D8%A3%D8%B1%D9%8A%D8%AF%20%D8%B1%D8%A4%D9%8A%D8%A9%20%D8%A7%D9%84%D9%85%D8%B2%D9%8A%D8%AF%20%D9%85%D9%86%20%D8%A7%D9%84%D8%A8%D8%A7%D9%82%D8%A7%D8%AA%20%D9%88%D8%A7%D9%84%D8%AA%D8%B5%D8%A7%D9%85%D9%8A%D9%85%20%D8%A7%D9%84%D8%A5%D8%B6%D8%A7%D9%81%D9%8A%D8%A9" target="_blank" rel="noopener noreferrer" class="btn-shine inline-flex items-center justify-center gap-2.5 px-6 py-3 rounded-2xl bg-gradient-to-l from-[#25D366] to-[#128C7E] hover:from-[#20bd5a] hover:to-[#0e7266] text-white font-bold text-xs sm:text-sm shadow-lg shadow-green-500/25 transition transform active:scale-95">
                         <i class="fa-brands fa-whatsapp text-lg"></i>
                         <span>للمزيد راسلنا عبر واتساب</span>
                     </a>
                 </div>
             </div>
 
-            <!-- مؤشر تحميل المنتجات من Google Sheet -->
-            <div id="loading-state" class="hidden glass-panel rounded-3xl p-12 text-center my-6">
-                <div class="w-14 h-14 mx-auto mb-3 rounded-full border-4 border-pink-200 border-t-pink-500 animate-spin"></div>
-                <h3 class="text-base font-bold text-slate-800">جاري تحميل أحدث الباقات والأسعار...</h3>
-            </div>
-
             <!-- حالة عدم وجود نتائج بحث -->
-            <div id="empty-state" class="hidden glass-panel rounded-3xl p-12 text-center my-6">
+            <div id="empty-state" class="hidden glass-panel rounded-3xl p-12 text-center my-6 animate-card">
                 <div class="w-16 h-16 mx-auto mb-4 rounded-2xl bg-pink-100 text-pink-500 flex items-center justify-center text-3xl">
                     <i class="fa-solid fa-seedling"></i>
                 </div>
@@ -422,7 +514,7 @@
             <!-- قسم التوصيل داخل القاهرة والجيزة وزيارة الفرع -->
             <section id="visit-delivery-section" class="mt-10 grid grid-cols-1 md:grid-cols-2 gap-5">
                 
-                <!-- بطاقة التوصيل داخل القاهرة والجيزة -->
+                <!-- بطاقة التوصيل -->
                 <div class="glass-panel rounded-3xl p-6 flex flex-col justify-between relative overflow-hidden">
                     <div>
                         <div class="flex items-center gap-3 mb-4">
@@ -480,7 +572,7 @@
                             </div>
                         </div>
                     </div>
-                    <a href="https://maps.app.goo.gl/TyDL6QeGfox8VXWB7" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-2 w-full py-2.5 px-4 rounded-2xl bg-gradient-to-l from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white font-bold text-xs sm:text-sm shadow-md shadow-pink-500/20 transition">
+                    <a href="https://maps.app.goo.gl/TyDL6QeGfox8VXWB7" target="_blank" rel="noopener noreferrer" class="btn-shine inline-flex items-center justify-center gap-2 w-full py-2.5 px-4 rounded-2xl bg-gradient-to-l from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white font-bold text-xs sm:text-sm shadow-md shadow-pink-500/20 transition">
                         <i class="fa-solid fa-map-location-dot text-base"></i>
                         <span>افتح لوكيشن الفرع على Google Maps</span>
                     </a>
@@ -515,10 +607,9 @@
     <!-- خلفية معتمة للسلة الجانبية -->
     <div id="cart-backdrop" class="fixed inset-0 bg-pink-950/30 backdrop-blur-xs z-40 hidden transition-opacity"></div>
 
-    <!-- نافذة السلة الجانبية (Slide-out Cart Drawer) مع زر واتساب بدلاً من الشيك اوت -->
+    <!-- نافذة السلة الجانبية -->
     <div id="cart-drawer" class="fixed top-0 left-0 h-full w-full sm:w-[420px] glass-drawer z-50 transform -translate-x-full transition-transform duration-300 ease-in-out flex flex-col shadow-2xl border-r border-white/80">
         
-        <!-- رأس السلة -->
         <div class="p-4 sm:p-5 border-b border-pink-200/70 flex items-center justify-between bg-white/60">
             <div class="flex items-center gap-2.5">
                 <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-pink-500 to-rose-400 text-white flex items-center justify-center shadow-sm">
@@ -534,13 +625,10 @@
             </button>
         </div>
 
-        <!-- قائمة عناصر السلة -->
         <div id="cart-items-container" class="flex-1 overflow-y-auto p-4 sm:p-5 space-y-3"></div>
 
-        <!-- أسفل السلة: الإجمالي + طريقة الاستلام + زر واتساب المباشر بدلاً من الشيك اوت -->
         <div id="cart-footer" class="p-4 sm:p-5 border-t border-pink-200/70 bg-white/80 backdrop-blur-md space-y-3">
             
-            <!-- اختيار طريقة الاستلام: توصيل داخل القاهرة والجيزة أو زيارة الفرع -->
             <div>
                 <label class="block text-xs font-bold text-slate-700 mb-1.5">
                     <i class="fa-solid fa-route text-pink-500 ml-1"></i> طريقة الاستلام:
@@ -563,7 +651,6 @@
                 </div>
             </div>
 
-            <!-- حقول رقم الهاتف والعنوان تظهر عند اختيار التوصيل داخل القاهرة والجيزة -->
             <div id="delivery-address-wrapper" class="space-y-2.5">
                 <div>
                     <label for="customer-phone" class="block text-xs font-bold text-slate-700 mb-1">
@@ -579,7 +666,6 @@
                 </div>
             </div>
 
-            <!-- حقل اختياري لإضافة رسالة إهداء مع الباقة -->
             <div>
                 <label for="gift-note" class="block text-xs font-bold text-slate-700 mb-1">
                     <i class="fa-solid fa-pen-nib text-pink-500 ml-1"></i> رسالة بطاقة الإهداء (اختياري):
@@ -587,7 +673,6 @@
                 <input type="text" id="gift-note" placeholder="اكتب عبارة جميلة تُرفق مع الورد..." class="glass-input w-full rounded-xl px-3 py-2 text-xs text-slate-700">
             </div>
 
-            <!-- تفاصيل السعر -->
             <div class="space-y-1 text-sm pt-1">
                 <div class="flex justify-between text-slate-600 text-xs">
                     <span>عدد الباقات:</span>
@@ -599,29 +684,21 @@
                 </div>
             </div>
 
-            <!-- الزر الرئيسي: يوديك للواتساب مباشرة بدلاً من الشيك اوت -->
-            <button id="whatsapp-order-btn" onclick="orderViaWhatsApp()" class="w-full py-3 px-5 rounded-2xl bg-gradient-to-l from-[#25D366] to-[#128C7E] hover:from-[#20bd5a] hover:to-[#0e7266] text-white font-bold text-sm sm:text-base shadow-lg shadow-green-500/30 flex items-center justify-center gap-2.5 transition transform active:scale-[0.98]">
+            <button id="whatsapp-order-btn" onclick="orderViaWhatsApp()" class="btn-shine w-full py-3 px-5 rounded-2xl bg-gradient-to-l from-[#25D366] to-[#128C7E] hover:from-[#20bd5a] hover:to-[#0e7266] text-white font-bold text-sm sm:text-base shadow-lg shadow-green-500/30 flex items-center justify-center gap-2.5 transition transform active:scale-[0.98]">
                 <i class="fa-brands fa-whatsapp text-2xl"></i>
                 <span>اطلب الآن عبر واتساب</span>
             </button>
 
             <p class="text-[11px] text-center text-slate-500">
-                سيتم تحويلك إلى واتساب المتجر مع تفاصيل طلبك ورقمك وعنوانك
+                سيتم تحويلك إلى واتساب المتجر مع روابط وصور الباقات المختارة
             </p>
         </div>
 
     </div>
 
-    <!-- كود الجافاسكريبت لإدارة المتجر، الأقسام، البحث، السلة، وواتساب -->
     <script>
-        // رقم واتساب المتجر
         const STORE_WHATSAPP_NUMBER = "201031656288";
 
-        // 🔗 ضع هنا رابط Google Sheet المنشور بصيغة CSV لإدارة الـ 70 منتجاً بسهولة من موبايلك!
-        // اتركه فارغاً '' لعرض المنتجات التجريبية الافتراضية
-        const GOOGLE_SHEET_CSV_URL = "";
-
-        // 1. تعريف الأقسام + قسم الكل
         const categories = [
             { id: 'all', name: 'جميع الأقسام', icon: 'fa-border-all' },
             { id: 'romantic', name: 'بوكيهات رومانسية', icon: 'fa-heart' },
@@ -632,7 +709,6 @@
             { id: 'chocolate', name: 'بوكيه شوكولاته', icon: 'fa-candy-cane' }
         ];
 
-        // 2. قائمة المنتجات المحددة الخاصة بك
         let products = [
             {
                 id: 1,
@@ -828,6 +904,8 @@
 
         let activeCategory = 'all';
         let searchQuery = '';
+        let currentSort = 'default';
+        let mobileLayout = 1; // 1 = فوق بعض (عمود واحد)، 2 = جنب بعض (عمودين)
         let cart = [];
 
         try {
@@ -836,13 +914,107 @@
             cart = [];
         }
 
-        // عند تحميل الصفحة
         document.addEventListener('DOMContentLoaded', () => {
             renderCategories();
             renderProducts();
             updateCartUI();
             setupEventListeners();
+            checkSharedProductLink();
         });
+
+        // توليد رابط مباشر لكل منتج (يعمل سواء على استضافة حقيقية أو محلياً)
+        function getProductLink(productId) {
+            try {
+                const url = new URL(window.location.href);
+                url.search = `?product=${productId}`;
+                url.hash = '';
+                return url.toString();
+            } catch (e) {
+                return `${window.location.origin}${window.location.pathname}?product=${productId}`;
+            }
+        }
+
+        // تحويل مسار الصورة النسبي إلى رابط كامل ليكون قابلاً للفتح في واتساب
+        function getFullImageUrl(imagePath) {
+            if (!imagePath) return '';
+            if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) {
+                return imagePath;
+            }
+            try {
+                return new URL(imagePath, window.location.href).toString();
+            } catch (e) {
+                return imagePath;
+            }
+        }
+
+        // عند فتح رابط منتج قادم من واتساب، يظهر المنتج مباشرة في نافذة معاينة
+        function checkSharedProductLink() {
+            const params = new URLSearchParams(window.location.search);
+            const productId = parseInt(params.get('product'), 10);
+            if (productId) {
+                const product = products.find(p => p.id === productId);
+                if (product) {
+                    openProductModal(product);
+                }
+            }
+        }
+
+        function openProductModal(product) {
+            const modal = document.getElementById('product-modal');
+            if (!modal) return;
+            document.getElementById('modal-img').src = product.image;
+            document.getElementById('modal-cat').textContent = product.categoryName;
+            document.getElementById('modal-title').textContent = product.name;
+            document.getElementById('modal-desc').textContent = product.description;
+            document.getElementById('modal-price').textContent = `${product.price} ج.م`;
+            
+            const addBtn = document.getElementById('modal-add-btn');
+            addBtn.onclick = () => {
+                addToCart(product.id);
+                closeProductModal();
+            };
+
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeProductModal() {
+            const modal = document.getElementById('product-modal');
+            if (!modal) return;
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        // تغيير طريقة العرض على الموبايل (فوق بعض أو جنب بعض)
+        function setMobileLayout(cols) {
+            mobileLayout = cols;
+            const grid = document.getElementById('products-grid');
+            const btn1 = document.getElementById('layout-1col-btn');
+            const btn2 = document.getElementById('layout-2col-btn');
+
+            if (cols === 2) {
+                grid.classList.remove('grid-cols-1');
+                grid.classList.add('grid-cols-2');
+                btn2.classList.add('bg-pink-500', 'text-white', 'shadow-xs');
+                btn2.classList.remove('text-slate-600');
+                btn1.classList.remove('bg-pink-500', 'text-white', 'shadow-xs');
+                btn1.classList.add('text-slate-600');
+            } else {
+                grid.classList.remove('grid-cols-2');
+                grid.classList.add('grid-cols-1');
+                btn1.classList.add('bg-pink-500', 'text-white', 'shadow-xs');
+                btn1.classList.remove('text-slate-600');
+                btn2.classList.remove('bg-pink-500', 'text-white', 'shadow-xs');
+                btn2.classList.add('text-slate-600');
+            }
+            renderProducts();
+        }
+
+        // تغيير الترتيب (Sort By)
+        function handleSortChange(sortValue) {
+            currentSort = sortValue;
+            renderProducts();
+        }
 
         function setupEventListeners() {
             const searchInput = document.getElementById('search-input');
@@ -867,54 +1039,35 @@
                 });
             }
 
-            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
-            if (mobileMenuBtn) mobileMenuBtn.addEventListener('click', openSidebar);
-
-            const closeSidebarBtn = document.getElementById('close-sidebar-btn');
-            if (closeSidebarBtn) closeSidebarBtn.addEventListener('click', closeSidebar);
-
-            const sidebarBackdrop = document.getElementById('sidebar-backdrop');
-            if (sidebarBackdrop) sidebarBackdrop.addEventListener('click', closeSidebar);
-
-            const openCartBtn = document.getElementById('open-cart-btn');
-            if (openCartBtn) openCartBtn.addEventListener('click', openCart);
-
-            const closeCartBtn = document.getElementById('close-cart-btn');
-            if (closeCartBtn) closeCartBtn.addEventListener('click', closeCart);
-
-            const cartBackdrop = document.getElementById('cart-backdrop');
-            if (cartBackdrop) cartBackdrop.addEventListener('click', closeCart);
+            document.getElementById('mobile-menu-btn')?.addEventListener('click', openSidebar);
+            document.getElementById('close-sidebar-btn')?.addEventListener('click', closeSidebar);
+            document.getElementById('sidebar-backdrop')?.addEventListener('click', closeSidebar);
+            document.getElementById('open-cart-btn')?.addEventListener('click', openCart);
+            document.getElementById('close-cart-btn')?.addEventListener('click', closeCart);
+            document.getElementById('cart-backdrop')?.addEventListener('click', closeCart);
         }
 
         function openSidebar() {
-            const sidebar = document.getElementById('sidebar');
-            const backdrop = document.getElementById('sidebar-backdrop');
-            if (sidebar) sidebar.classList.remove('translate-x-full');
-            if (backdrop) backdrop.classList.remove('hidden');
+            document.getElementById('sidebar')?.classList.remove('translate-x-full');
+            document.getElementById('sidebar-backdrop')?.classList.remove('hidden');
             document.body.style.overflow = 'hidden';
         }
 
         function closeSidebar() {
-            const sidebar = document.getElementById('sidebar');
-            const backdrop = document.getElementById('sidebar-backdrop');
-            if (sidebar) sidebar.classList.add('translate-x-full');
-            if (backdrop) backdrop.classList.add('hidden');
+            document.getElementById('sidebar')?.classList.add('translate-x-full');
+            document.getElementById('sidebar-backdrop')?.classList.add('hidden');
             document.body.style.overflow = '';
         }
 
         function openCart() {
-            const drawer = document.getElementById('cart-drawer');
-            const backdrop = document.getElementById('cart-backdrop');
-            if (drawer) drawer.classList.remove('-translate-x-full');
-            if (backdrop) backdrop.classList.remove('hidden');
+            document.getElementById('cart-drawer')?.classList.remove('-translate-x-full');
+            document.getElementById('cart-backdrop')?.classList.remove('hidden');
             document.body.style.overflow = 'hidden';
         }
 
         function closeCart() {
-            const drawer = document.getElementById('cart-drawer');
-            const backdrop = document.getElementById('cart-backdrop');
-            if (drawer) drawer.classList.add('-translate-x-full');
-            if (backdrop) backdrop.classList.add('hidden');
+            document.getElementById('cart-drawer')?.classList.add('-translate-x-full');
+            document.getElementById('cart-backdrop')?.classList.add('hidden');
             document.body.style.overflow = '';
         }
 
@@ -932,10 +1085,12 @@
             if (e) e.preventDefault();
             activeCategory = 'all';
             searchQuery = '';
+            currentSort = 'default';
+            const sortSelect = document.getElementById('sort-select');
+            if (sortSelect) sortSelect.value = 'default';
             const searchInput = document.getElementById('search-input');
             if (searchInput) searchInput.value = '';
-            const clearBtn = document.getElementById('clear-search-btn');
-            if (clearBtn) clearBtn.classList.add('hidden');
+            document.getElementById('clear-search-btn')?.classList.add('hidden');
             const titleEl = document.getElementById('current-category-title');
             if (titleEl) titleEl.textContent = 'جميع الورود والباقات';
             renderCategories();
@@ -953,7 +1108,7 @@
                     return `
                         <button onclick="selectCategory('${cat.id}')" class="w-full flex items-center justify-between px-4 py-3 rounded-2xl text-sm font-bold transition-all ${
                             isActive 
-                            ? 'bg-gradient-to-l from-pink-500 to-rose-500 text-white shadow-md shadow-pink-500/25' 
+                            ? 'bg-gradient-to-l from-pink-500 to-rose-500 text-white shadow-md shadow-pink-500/25 scale-[1.02]' 
                             : 'bg-white/40 hover:bg-white/80 text-slate-700 hover:text-pink-600 border border-white/60'
                         }">
                             <div class="flex items-center gap-3">
@@ -991,6 +1146,15 @@
                 return matchCat && matchSearch;
             });
 
+            // تطبيق الترتيب (Sort By)
+            if (currentSort === 'price-asc') {
+                filtered.sort((a, b) => a.price - b.price);
+            } else if (currentSort === 'price-desc') {
+                filtered.sort((a, b) => b.price - a.price);
+            } else if (currentSort === 'name-asc') {
+                filtered.sort((a, b) => a.name.localeCompare(b.name, 'ar'));
+            }
+
             const countEl = document.getElementById('products-count');
             if (countEl) countEl.textContent = `${filtered.length} منتج`;
 
@@ -1008,33 +1172,35 @@
             grid.classList.remove('hidden');
             emptyState.classList.add('hidden');
 
-            grid.innerHTML = filtered.map(p => `
-                <div class="glass-card rounded-3xl overflow-hidden flex flex-col justify-between">
+            const isTwoColsMobile = mobileLayout === 2;
+
+            grid.innerHTML = filtered.map((p, index) => `
+                <div style="animation-delay: ${Math.min(index * 0.05, 0.45)}s;" class="animate-card glass-card rounded-2xl sm:rounded-3xl overflow-hidden flex flex-col justify-between">
                     <div>
-                        <div class="relative h-56 sm:h-60 bg-pink-100/50 overflow-hidden group">
+                        <div onclick="openProductModal(products.find(x => x.id === ${p.id}))" class="cursor-pointer relative ${isTwoColsMobile ? 'h-36 sm:h-60' : 'h-56 sm:h-60'} bg-pink-100/50 overflow-hidden group">
                             <img 
                                 src="${p.image}" 
                                 alt="${p.name}" 
                                 onerror="this.onerror=null; this.src='https://placehold.co/600x500/fce7f3/db2777?text=Pink+Flower';"
-                                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                                class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                             >
-                            <span class="absolute top-3 right-3 px-3 py-1 rounded-full text-xs font-extrabold bg-white/85 backdrop-blur-md text-pink-700 shadow-xs border border-white">
+                            <span class="absolute top-2 right-2 sm:top-3 sm:right-3 ${isTwoColsMobile ? 'px-2 py-0.5 text-[10px] sm:px-3 sm:py-1 sm:text-xs' : 'px-3 py-1 text-xs'} rounded-full font-extrabold bg-white/85 backdrop-blur-md text-pink-700 shadow-xs border border-white">
                                 ${p.categoryName}
                             </span>
-                            ${p.badge ? `<span class="absolute top-3 left-3 px-3 py-1 rounded-full text-xs font-extrabold bg-pink-500 text-white shadow-xs">${p.badge}</span>` : ''}
+                            ${p.badge ? `<span class="absolute top-2 left-2 sm:top-3 sm:left-3 ${isTwoColsMobile ? 'px-2 py-0.5 text-[10px] sm:px-3 sm:py-1 sm:text-xs' : 'px-3 py-1 text-xs'} rounded-full font-extrabold bg-pink-500 text-white shadow-xs">${p.badge}</span>` : ''}
                         </div>
-                        <div class="p-5 pb-2">
-                            <h3 class="font-bold text-lg text-slate-800 mb-1">${p.name}</h3>
-                            <p class="text-xs sm:text-sm text-slate-600 line-clamp-2 leading-relaxed">${p.description}</p>
+                        <div class="${isTwoColsMobile ? 'p-3 pb-1 sm:p-5 sm:pb-2' : 'p-5 pb-2'}">
+                            <h3 onclick="openProductModal(products.find(x => x.id === ${p.id}))" class="cursor-pointer hover:text-pink-600 transition font-bold ${isTwoColsMobile ? 'text-sm sm:text-lg line-clamp-1' : 'text-lg'} text-slate-800 mb-1">${p.name}</h3>
+                            <p class="text-xs sm:text-sm text-slate-600 ${isTwoColsMobile ? 'line-clamp-1 sm:line-clamp-2' : 'line-clamp-2'} leading-relaxed">${p.description}</p>
                         </div>
                     </div>
-                    <div class="p-5 pt-3 flex items-center justify-between border-t border-white/60 mt-2">
-                        <div>
-                            <span class="text-[11px] text-slate-500 block">السعر</span>
-                            <span class="text-lg sm:text-xl font-extrabold text-pink-600">${p.price} <small class="text-xs font-bold">ج.م</small></span>
+                    <div class="${isTwoColsMobile ? 'p-3 pt-2 sm:p-5 sm:pt-3 flex-col sm:flex-row items-stretch sm:items-center gap-2' : 'p-5 pt-3 flex-row items-center'} flex justify-between border-t border-white/60 mt-2">
+                        <div class="flex items-baseline justify-between sm:block">
+                            <span class="text-[10px] sm:text-[11px] text-slate-500 block">السعر</span>
+                            <span class="${isTwoColsMobile ? 'text-sm sm:text-xl' : 'text-lg sm:text-xl'} font-extrabold text-pink-600">${p.price} <small class="text-[10px] sm:text-xs font-bold">ج.م</small></span>
                         </div>
-                        <button onclick="addToCart(${p.id})" class="flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-gradient-to-l from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white font-bold text-xs sm:text-sm shadow-md shadow-pink-500/20 transition active:scale-95">
-                            <i class="fa-solid fa-cart-plus text-base"></i>
+                        <button onclick="addToCart(${p.id})" class="btn-shine flex items-center justify-center gap-1.5 sm:gap-2 ${isTwoColsMobile ? 'px-2.5 py-2 sm:px-4 sm:py-2.5 text-[11px] sm:text-sm' : 'px-4 py-2.5 text-xs sm:text-sm'} rounded-xl sm:rounded-2xl bg-gradient-to-l from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white font-bold shadow-md shadow-pink-500/20 transition active:scale-95">
+                            <i class="fa-solid fa-cart-plus text-xs sm:text-base"></i>
                             <span>أضف للسلة</span>
                         </button>
                     </div>
@@ -1053,6 +1219,15 @@
             }
             saveCart();
             updateCartUI();
+
+            // حركة نبض لعداد السلة
+            const badge = document.getElementById('cart-badge');
+            if (badge) {
+                badge.classList.remove('badge-pop');
+                void badge.offsetWidth;
+                badge.classList.add('badge-pop');
+            }
+
             showToast(`تمت إضافة "${product.name}" إلى السلة 🌸`);
         }
 
@@ -1097,7 +1272,7 @@
             if (cart.length === 0) {
                 container.innerHTML = `
                     <div class="h-full flex flex-col items-center justify-center text-center py-12 px-4">
-                        <div class="w-16 h-16 rounded-full bg-pink-100 text-pink-400 flex items-center justify-center text-3xl mb-3">
+                        <div class="w-16 h-16 rounded-full bg-pink-100 text-pink-400 flex items-center justify-center text-3xl mb-3 animate-float-icon">
                             <i class="fa-solid fa-bag-shopping"></i>
                         </div>
                         <h3 class="font-bold text-slate-700 text-base">سلتك فارغة حالياً</h3>
@@ -1108,7 +1283,7 @@
             }
 
             container.innerHTML = cart.map(item => `
-                <div class="flex items-center gap-3 p-3 rounded-2xl bg-white/75 border border-white shadow-xs">
+                <div class="flex items-center gap-3 p-3 rounded-2xl bg-white/75 border border-white shadow-xs transition hover:bg-white">
                     <img src="${item.image}" alt="${item.name}" onerror="this.onerror=null; this.src='https://placehold.co/150x150/fce7f3/db2777?text=Rose';" class="w-16 h-16 rounded-xl object-cover shrink-0">
                     <div class="flex-1 min-w-0">
                         <h4 class="font-bold text-sm text-slate-800 truncate">${item.name}</h4>
@@ -1132,7 +1307,7 @@
             }
         }
 
-        // إرسال الطلب عبر واتساب مع زر المزيد أسفل المنتجات
+        // إرسال الطلب عبر واتساب مع إرفاق رابط وصورة كل منتج
         function orderViaWhatsApp() {
             if (cart.length === 0) {
                 showToast('يرجى إضافة باقة واحدة على الأقل للسلة أولاً 🌸', 'warning');
@@ -1165,9 +1340,18 @@
 
             let text = `مرحباً Pink Flower 🌸\nأرغب في طلب الباقات التالية:\n\n`;
             cart.forEach((i, idx) => {
-                text += `${idx + 1}. *${i.name}*\n   • الكمية: ${i.quantity}\n   • السعر: ${i.price * i.quantity} ج.م\n`;
+                const itemLink = getProductLink(i.id);
+                const imgLink = getFullImageUrl(i.image);
+                text += `${idx + 1}. *${i.name}* (كود #${i.id})\n`;
+                text += `   • الكمية: ${i.quantity}\n`;
+                text += `   • السعر: ${i.price * i.quantity} ج.م\n`;
+                text += `   • 🔗 رابط المنتج: ${itemLink}\n`;
+                if (imgLink) {
+                    text += `   • 🖼️ رابط الصورة: ${imgLink}\n`;
+                }
+                text += `\n`;
             });
-            text += `\n────────────────────\n`;
+            text += `────────────────────\n`;
             text += `💰 *الإجمالي الكلي:* ${totalPrice} ج.م\n`;
 
             if (method === 'delivery') {
